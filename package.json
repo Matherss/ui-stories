@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Matherss/ui-stories"
+    "url": "git+https://github.com/Matherss/ui-stories.git"
   },
   "keywords": [
     "vue",
@@ -22,7 +22,7 @@
     "./module": "./module/index.js"
   },
   "bin": {
-    "ui-stories": "./bin/serve.js"
+    "ui-stories": "bin/serve.js"
   },
   "files": [
     "bin",
@@ -32,7 +32,10 @@
     "index.js"
   ],
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "@parcel/watcher"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@parcel/watcher"
+    ]
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
