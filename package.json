@@ -1,0 +1,46 @@
+{
+  "name": "ui-stories",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lightweight Storybook alternative for Vue / Nuxt projects",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Matherss/ui-stories"
+  },
+  "keywords": [
+    "vue",
+    "nuxt",
+    "storybook",
+    "stories",
+    "components",
+    "dev-tools"
+  ],
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./module": "./module/index.js"
+  },
+  "bin": {
+    "ui-stories": "./bin/serve.js"
+  },
+  "files": [
+    "bin",
+    "server",
+    "module",
+    "app",
+    "index.js"
+  ],
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "@parcel/watcher"]
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "fast-glob": "^3.3.3",
+    "sass": "^1.77.6",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^32.0.0",
+    "vite": "^6.3.2",
+    "vue": "^3.5.0"
+  }
+}
