@@ -48,7 +48,7 @@ export async function startStoriesServer({
   const pkgRoot = resolve(__dirname, '..');
 
   // Runtime compiler needed for dynamic template strings in stories
-  resolvedAlias.vue = resolve(pkgRoot, 'node_modules', 'vue', 'dist', 'vue.esm-bundler.js');
+  resolvedAlias.vue = 'vue/dist/vue.esm-bundler.js';
 
   const server = await createServer({
     configFile: false,
