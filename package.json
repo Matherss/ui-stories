@@ -21,8 +21,14 @@
     ".": "./index.js",
     "./module": "./module/index.js"
   },
+  "scripts": {
+    "build:static": "node bin/build-static.js",
+    "preview:static": "node bin/serve-static.js"
+  },
   "bin": {
-    "ui-stories": "bin/serve.js"
+    "ui-stories": "bin/serve.js",
+    "ui-stories-build": "bin/build-static.js",
+    "ui-stories-preview": "bin/serve-static.js"
   },
   "files": [
     "bin",

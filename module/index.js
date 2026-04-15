@@ -1,17 +1,6 @@
 import { defineNuxtModule } from '@nuxt/kit';
 import { resolve } from 'node:path';
-import { existsSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
-
-const DEFAULTS = {
-  scanDirs: ['app/components'],
-  styles: [],
-  port: 6006,
-  alias: {},
-  scssLoadPaths: [],
-  svgSpritePath: '/assets/sprite/',
-  autoImports: [],
-};
+import { loadUiStoriesConfig } from '../server/userConfig.js';
 
 export default defineNuxtModule({
   meta: {
@@ -23,7 +12,7 @@ export default defineNuxtModule({
     if (!nuxt.options.dev) return;
 
     const hostRoot = nuxt.options.rootDir;
-    const config = await loadConfig(hostRoot);
+    const config = await loadUiStoriesConfig(hostRoot);
 
     const nuxtAlias = {
       '~': resolve(hostRoot, 'app'),
@@ -55,26 +44,3 @@ export default defineNuxtModule({
     });
   },
 });
-
-async function loadConfig(hostRoot) {
-  const configPath = resolve(hostRoot, 'ui-stories.config.js');
-
-  if (!existsSync(configPath)) {
-    return { ...DEFAULTS };
-  }
-
-  const configUrl = pathToFileURL(configPath).href;
-  const mod = await import(configUrl);
-  const userConfig = mod.default || mod;
-
-  return {
-    scanDirs: userConfig.scanDirs || DEFAULTS.scanDirs,
-    styles: userConfig.styles || DEFAULTS.styles,
-    port: userConfig.port || DEFAULTS.port,
-    alias: userConfig.alias || DEFAULTS.alias,
-    scssAdditionalData: userConfig.scssAdditionalData || '',
-    scssLoadPaths: userConfig.scssLoadPaths || DEFAULTS.scssLoadPaths,
-    svgSpritePath: userConfig.svgSpritePath || DEFAULTS.svgSpritePath,
-    autoImports: userConfig.autoImports || DEFAULTS.autoImports,
-  };
-}

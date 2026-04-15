@@ -1,4 +1,4 @@
-import { createServer } from 'vite';
+import { createServer, build } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
@@ -16,26 +16,22 @@ const appRoot = resolve(__dirname, '..', 'app');
  *   hostRoot: string,
  *   scanDirs: string[],
  *   styles: string[],
- *   port: number,
  *   alias: Record<string, string>,
  *   scssAdditionalData?: string,
  *   scssLoadPaths?: string[],
  *   svgSpritePath?: string,
  *   autoImports?: string[],
- *   open?: boolean,
  * }} options
  */
-export async function startStoriesServer({
+export function getStoriesViteConfig({
   hostRoot,
   scanDirs,
   styles,
-  port,
   alias,
   scssAdditionalData = '',
   scssLoadPaths = [],
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
-  open = false,
 }) {
   const resolvedAlias = {};
   for (const [key, val] of Object.entries(alias)) {
@@ -45,22 +41,14 @@ export async function startStoriesServer({
   const scssData = normalizeScssAdditionalData(scssAdditionalData, hostRoot, resolvedAlias);
   const resolvedScanDirs = scanDirs.map((d) => resolve(hostRoot, d));
 
-  const pkgRoot = resolve(__dirname, '..');
-
   // Runtime compiler needed for dynamic template strings in stories
   resolvedAlias.vue = 'vue/dist/vue.esm-bundler.js';
 
-  const server = await createServer({
+  return {
     configFile: false,
     root: appRoot,
 
     publicDir: resolve(hostRoot, 'public'),
-
-    server: {
-      port,
-      strictPort: true,
-      open,
-    },
 
     plugins: [
       vue(),
@@ -98,9 +86,111 @@ export async function startStoriesServer({
       include: ['vue'],
       entries: [resolve(appRoot, 'index.html')],
     },
+  };
+}
+
+/**
+ * @param {{
+ *   hostRoot: string,
+ *   scanDirs: string[],
+ *   styles: string[],
+ *   port: number,
+ *   alias: Record<string, string>,
+ *   scssAdditionalData?: string,
+ *   scssLoadPaths?: string[],
+ *   svgSpritePath?: string,
+ *   autoImports?: string[],
+ *   open?: boolean,
+ * }} options
+ */
+export async function startStoriesServer({
+  hostRoot,
+  scanDirs,
+  styles,
+  port,
+  alias,
+  scssAdditionalData = '',
+  scssLoadPaths = [],
+  svgSpritePath = '/assets/sprite/',
+  autoImports = [],
+  open = false,
+}) {
+  const inline = getStoriesViteConfig({
+    hostRoot,
+    scanDirs,
+    styles,
+    alias,
+    scssAdditionalData,
+    scssLoadPaths,
+    svgSpritePath,
+    autoImports,
+  });
+
+  const server = await createServer({
+    ...inline,
+    server: {
+      port,
+      strictPort: true,
+      open,
+    },
   });
 
   await server.listen();
+}
+
+/**
+ * Production build: minified static assets under `outDir`.
+ *
+ * @param {{
+ *   hostRoot: string,
+ *   scanDirs: string[],
+ *   styles: string[],
+ *   alias: Record<string, string>,
+ *   scssAdditionalData?: string,
+ *   scssLoadPaths?: string[],
+ *   svgSpritePath?: string,
+ *   autoImports?: string[],
+ *   outDir: string,
+ *   base?: string,
+ * }} options
+ */
+export async function buildStoriesStatic({
+  hostRoot,
+  scanDirs,
+  styles,
+  alias,
+  scssAdditionalData = '',
+  scssLoadPaths = [],
+  svgSpritePath = '/assets/sprite/',
+  autoImports = [],
+  outDir,
+  base = './',
+}) {
+  const inline = getStoriesViteConfig({
+    hostRoot,
+    scanDirs,
+    styles,
+    alias,
+    scssAdditionalData,
+    scssLoadPaths,
+    svgSpritePath,
+    autoImports,
+  });
+
+  await build({
+    ...inline,
+    mode: 'production',
+    base,
+    build: {
+      outDir,
+      emptyOutDir: true,
+      minify: 'esbuild',
+      cssMinify: true,
+      rollupOptions: {
+        input: resolve(appRoot, 'index.html'),
+      },
+    },
+  });
 }
 
 function uiStoriesConfigPlugin({ svgSpritePath }) {
