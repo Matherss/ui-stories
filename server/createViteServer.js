@@ -90,7 +90,6 @@ export async function startStoriesServer({
         scss: {
           additionalData: scssData,
           loadPaths: scssLoadPaths.map((p) => resolve(hostRoot, p)),
-          silenceDeprecations: ['import'],
         },
       },
     },
