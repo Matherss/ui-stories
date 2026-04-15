@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { cp } from 'node:fs/promises';
 import { buildStoriesStatic } from '../server/createViteServer.js';
 import { loadUiStoriesConfig } from '../server/userConfig.js';
 
@@ -39,7 +41,24 @@ async function main() {
     base,
   });
 
+  await copyHostPublicToOutDir(hostRoot, outDir);
+
   console.log(`\n  \x1b[36m[ui-stories]\x1b[0m build → ${outDir}\n`);
+}
+
+/**
+ * Copies `<hostRoot>/public` into `<outDir>/public`.
+ * This is intentional: host projects can reference their public assets via `/public/...`.
+ *
+ * @param {string} hostRoot
+ * @param {string} outDir
+ */
+async function copyHostPublicToOutDir(hostRoot, outDir) {
+  const src = resolve(hostRoot, 'public');
+  if (!existsSync(src)) return;
+
+  const dest = resolve(outDir, 'public');
+  await cp(src, dest, { recursive: true, force: true });
 }
 
 main().catch((err) => {
