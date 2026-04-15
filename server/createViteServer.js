@@ -179,6 +179,10 @@ export async function buildStoriesStatic({
 
   await build({
     ...inline,
+    // When building into Nuxt/Nitro public assets we must avoid copying
+    // the host project's entire `public/` folder into the UI Stories output.
+    // Nitro will already serve host public assets separately.
+    publicDir: false,
     mode: 'production',
     base,
     build: {
