@@ -18,11 +18,14 @@ npx ui-stories
 pnpm stories
 ```
 
-Create `ui-stories.config.js` in your project root and start writing `.stories.ts` files.
+Create `ui-stories.config.mjs` (recommended) in your project root and start writing `.stories.ts` files.
 
 ---
 
-## Configuration (`ui-stories.config.js`)
+## Configuration (`ui-stories.config.mjs`)
+
+If your project does **not** have `"type": "module"` in `package.json`, using `.mjs` avoids Node warnings.
+Alternatively you can use `ui-stories.config.cjs` for CommonJS.
 
 ```javascript
 export default {
