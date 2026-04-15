@@ -74,30 +74,21 @@ When running `nuxt dev`, UI Stories starts automatically alongside the Nuxt dev 
 The module reads `~/app` and `@/app` aliases from Nuxt conventions and can pick up
 `scssAdditionalData` and `scssLoadPaths` from `nuxt.options.vite.css.preprocessorOptions.scss` as fallback.
 
-### Production (`pnpm build` / `pnpm start`)
+### Production
 
-By default, during `nuxt build` the module will also build a static UI Stories bundle and serve it from `/ui-stories/` after start.
+UI Stories **does not participate in `nuxt build`** and must be built/served separately.
 
-To disable this behavior:
+Build a static bundle:
 
-```ts
-export default defineNuxtConfig({
-  modules: ['ui-stories'],
-  uiStories: {
-    static: false,
-  },
-});
+```bash
+# from your project root
+npx ui-stories-build --outDir dist/ui-stories --base /ui-stories/
 ```
 
-Optional: change the base URL (default is `'/ui-stories/'`):
+Preview it locally (or run as a standalone Node process behind Nginx):
 
-```ts
-export default defineNuxtConfig({
-  modules: ['ui-stories'],
-  uiStories: {
-    baseURL: '/some-path/',
-  },
-});
+```bash
+npx ui-stories-preview dist/ui-stories
 ```
 
 ---

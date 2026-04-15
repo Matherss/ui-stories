@@ -9,8 +9,8 @@ export default defineNuxtModule({
   },
 
   async setup(moduleOptions, nuxt) {
-    const prodStaticEnabled = (moduleOptions?.static ?? true) !== false;
-    const prodBaseURL = moduleOptions?.baseURL ?? '/ui-stories/';
+    // Important: this module must not affect production builds.
+    // UI Stories is intended to be built/served separately in production.
 
     const hostRoot = nuxt.options.rootDir;
     const config = await loadUiStoriesConfig(hostRoot);
@@ -51,46 +51,5 @@ export default defineNuxtModule({
 
       return;
     }
-
-    if (!prodStaticEnabled) return;
-
-    // Prod build: generate a static UI Stories bundle and serve it from `baseURL`.
-    // Nitro will copy/serve this directory as a public asset.
-    const outDir = resolve(nuxt.options.buildDir, 'ui-stories');
-
-    /** @type {boolean} */
-    let built = false;
-    async function buildOnce() {
-      if (built) return;
-      built = true;
-
-      const { buildStoriesStatic } = await import('../server/createViteServer.js');
-
-      await buildStoriesStatic({
-        hostRoot,
-        scanDirs: config.scanDirs,
-        styles: config.styles,
-        alias: mergedAlias,
-        scssAdditionalData,
-        scssLoadPaths,
-        svgSpritePath: config.svgSpritePath,
-        autoImports: config.autoImports,
-        outDir,
-        base: prodBaseURL,
-      });
-    }
-
-    // Prefer Nuxt build hook; keep Nitro hook as a fallback.
-    nuxt.hook('build:before', buildOnce);
-    nuxt.hook('nitro:build:before', buildOnce);
-
-    nuxt.options.nitro = nuxt.options.nitro || {};
-    nuxt.options.nitro.publicAssets = nuxt.options.nitro.publicAssets || [];
-    nuxt.options.nitro.publicAssets.push({
-      dir: outDir,
-      baseURL: prodBaseURL,
-      // @ts-ignore - Nitro supports this option (Nuxt types may lag behind).
-      maxAge: 60 * 60 * 24 * 30,
-    });
   },
 });
