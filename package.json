@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/Matherss/ui-stories.git"
   },
-  "packageManager": "pnpm@10.x.x",
+  "packageManager": "pnpm@10.33.0",
   "keywords": [
     "vue",
     "nuxt",
