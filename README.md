@@ -50,6 +50,12 @@ export default {
   // Base path for SVG sprite <use href="...">
   svgSpritePath: '/assets/sprite/',
 
+  // Optional per-mode overrides:
+  // - dev server (Vite serves `<hostRoot>/public` at `/`)
+  svgSpritePathDev: '/assets/sprite/',
+  // - static build/preview (host `public` is copied to `<outDir>/public`)
+  svgSpritePathBuild: '/public/assets/sprite/',
+
   // Auto-import presets (e.g. '@vueuse/core', 'pinia')
   // 'vue' is always included automatically
   autoImports: ['@vueuse/core'],

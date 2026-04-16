@@ -16,7 +16,7 @@ async function main() {
     alias: config.alias,
     scssAdditionalData: config.scssAdditionalData,
     scssLoadPaths: config.scssLoadPaths,
-    svgSpritePath: config.svgSpritePath,
+    svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
     autoImports: config.autoImports,
     open: true,
   });

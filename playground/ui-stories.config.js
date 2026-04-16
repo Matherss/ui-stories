@@ -7,5 +7,7 @@ export default {
     '@': 'app',
   },
   svgSpritePath: '/assets/sprite/',
+  svgSpritePathDev: '/assets/sprite/',
+  svgSpritePathBuild: '/public/assets/sprite/',
   port: 6006,
 };

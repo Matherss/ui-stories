@@ -42,7 +42,7 @@ export default defineNuxtModule({
           alias: mergedAlias,
           scssAdditionalData,
           scssLoadPaths,
-          svgSpritePath: config.svgSpritePath,
+          svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
           autoImports: config.autoImports,
         });
 

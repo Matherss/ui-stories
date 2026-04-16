@@ -76,6 +76,7 @@ export function getStoriesViteConfig({
       },
       preprocessorOptions: {
         scss: {
+          api: 'modern-compiler',
           additionalData: scssData,
           loadPaths: scssLoadPaths.map((p) => resolve(hostRoot, p)),
         },

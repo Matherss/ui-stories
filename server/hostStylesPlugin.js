@@ -22,12 +22,12 @@ export function hostStylesPlugin({ hostRoot, styles }) {
 
       if (!styles.length) return '/* no host styles configured */';
 
-      const imports = styles.map((stylePath) => {
+      const loads = styles.map((stylePath) => {
         const abs = resolve(hostRoot, stylePath).replace(/\\/g, '/');
-        return `  @import "${abs}";`;
+        return `  @include meta.load-css("${abs}");`;
       });
 
-      return `.uis-story__preview {\n${imports.join('\n')}\n}`;
+      return `@use "sass:meta";\n\n.uis-story__preview {\n${loads.join('\n')}\n}`;
     },
   };
 }

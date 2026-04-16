@@ -10,6 +10,8 @@ export const UI_STORIES_DEFAULTS = {
   alias: {},
   scssLoadPaths: [],
   svgSpritePath: '/assets/sprite/',
+  svgSpritePathDev: null,
+  svgSpritePathBuild: null,
   autoImports: [],
 };
 
@@ -41,6 +43,8 @@ export async function loadUiStoriesConfig(hostRoot) {
     scssAdditionalData: userConfig.scssAdditionalData || '',
     scssLoadPaths: userConfig.scssLoadPaths || UI_STORIES_DEFAULTS.scssLoadPaths,
     svgSpritePath: userConfig.svgSpritePath || UI_STORIES_DEFAULTS.svgSpritePath,
+    svgSpritePathDev: userConfig.svgSpritePathDev ?? UI_STORIES_DEFAULTS.svgSpritePathDev,
+    svgSpritePathBuild: userConfig.svgSpritePathBuild ?? UI_STORIES_DEFAULTS.svgSpritePathBuild,
     autoImports: userConfig.autoImports || UI_STORIES_DEFAULTS.autoImports,
   };
 }

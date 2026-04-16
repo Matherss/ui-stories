@@ -35,7 +35,7 @@ async function main() {
     alias: config.alias,
     scssAdditionalData: config.scssAdditionalData,
     scssLoadPaths: config.scssLoadPaths,
-    svgSpritePath: config.svgSpritePath,
+    svgSpritePath: config.svgSpritePathBuild ?? config.svgSpritePath,
     autoImports: config.autoImports,
     outDir,
     base,
