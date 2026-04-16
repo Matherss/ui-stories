@@ -28,7 +28,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build UI Stories (static)
-        run: pnpm run build:static -- --outDir dist/ui-stories --base "/${{ github.event.repository.name }}/"
+        working-directory: playground
+        run: pnpm stories:build -- --outDir ../dist/ui-stories --base "/${{ github.event.repository.name }}/"
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
