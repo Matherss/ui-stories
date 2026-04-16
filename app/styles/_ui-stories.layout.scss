@@ -1,0 +1,10 @@
+.uis-app {
+  min-height: 100vh;
+}
+
+.uis-body {
+  display: flex;
+  padding-top: var(--uis-header-h);
+  min-height: calc(100vh - var(--uis-header-h));
+}
+

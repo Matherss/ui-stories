@@ -1,0 +1,15 @@
+.uis-main {
+  flex: 1;
+  margin-left: var(--uis-sidebar-w);
+  padding: var(--uis-main-pad);
+}
+
+.uis-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--uis-empty-h);
+  color: var(--uis-neutral-600);
+  font-size: var(--uis-empty-font-size);
+}
+
