@@ -1,0 +1,188 @@
+:root {
+  /* Layout */
+  --uis-sidebar-w: 260px;
+  --uis-header-h: 48px;
+  --uis-radius: 6px;
+  --uis-z-header: 100;
+
+  /* Typography */
+  --uis-font-sans: 'Commissioner', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --uis-font-size: 16px;
+  --uis-line-height: 1.4;
+  --uis-font-size-xs: 12px;
+  --uis-font-size-sm: 14px;
+  --uis-font-size-md: 16px;
+  --uis-font-size-lg: 18px;
+  --uis-font-size-xl: 20px;
+
+  /* Core palette */
+  --uis-bg: #f5f5f5;
+  --uis-bg-sidebar: #1e1e2e;
+  --uis-controls-bg: #ffffff;
+
+  --uis-text: #333333;
+  --uis-text-muted: #888888;
+  --uis-text-soft: #555555;
+  --uis-text-placeholder: rgba(255, 255, 255, 0.4);
+  --uis-text-sidebar: #cdd6f4;
+  --uis-text-inverse: #ffffff;
+  --uis-text-disabled-opacity: 0.5;
+
+  --uis-border: #e0e0e0;
+  --uis-border-soft: #f0f0f0;
+  --uis-border-dark-alpha: rgba(255, 255, 255, 0.15);
+  --uis-border-black-alpha: rgba(0, 0, 0, 0.15);
+  --uis-border-black-alpha-soft: rgba(0, 0, 0, 0.12);
+  --uis-border-w: 1px;
+
+  /* Accent */
+  --uis-accent: #6c5ce7;
+  --uis-accent-hover: #7c6cf7;
+  --uis-accent-bg: rgba(108, 92, 231, 0.12);
+  --uis-accent-bg-soft: rgba(108, 92, 231, 0.06);
+
+  /* Neutrals used in a few widgets */
+  --uis-neutral-000: #ffffff;
+  --uis-neutral-200: #e0e0e0;
+  --uis-neutral-300: #cccccc;
+  --uis-neutral-600: #999999;
+
+  /* Checker theme */
+  --uis-checker: #e0e0e0;
+  --uis-checker-small: #cccccc;
+  --uis-checker-angle: 45deg;
+  --uis-checker-stop-a: 25%;
+  --uis-checker-stop-b: 75%;
+
+  /* Spacing */
+  --uis-space-2: 2px;
+  --uis-space-3: 3px;
+  --uis-space-4: 4px;
+  --uis-space-5: 5px;
+  --uis-space-6: 6px;
+  --uis-space-8: 8px;
+  --uis-space-10: 10px;
+  --uis-space-12: 12px;
+  --uis-space-14: 14px;
+  --uis-space-16: 16px;
+  --uis-space-20: 20px;
+  --uis-space-24: 24px;
+  --uis-space-32: 32px;
+  --uis-space-42: 42px;
+
+  /* Motion */
+  --uis-t-120: 0.12s;
+  --uis-t-150: 0.15s;
+  --uis-t-200: 0.2s;
+
+  /* Header */
+  --uis-header-gap: var(--uis-space-16);
+  --uis-header-pad-x: var(--uis-space-16);
+  --uis-header-logo-letter-spacing: 0.5px;
+  --uis-header-search-max-w: 320px;
+  --uis-header-search-h: 32px;
+  --uis-header-search-pad-x: var(--uis-space-10);
+  --uis-header-search-bg: rgba(255, 255, 255, 0.08);
+
+  /* Sidebar */
+  --uis-sidebar-pad-y: var(--uis-space-8);
+  --uis-sidebar-dir-mb: var(--uis-space-2);
+  --uis-sidebar-dir-gap: var(--uis-space-6);
+  --uis-sidebar-dir-pad-y: var(--uis-space-8);
+  --uis-sidebar-dir-pad-x: var(--uis-space-10);
+  --uis-sidebar-dir-letter-spacing: 0.6px;
+  --uis-sidebar-dir-font-size: var(--uis-font-size-xs);
+  --uis-sidebar-dir-color: rgba(255, 255, 255, 0.45);
+  --uis-sidebar-dir-color-hover: rgba(255, 255, 255, 0.7);
+  --uis-sidebar-dir-body-pad-b: var(--uis-space-4);
+
+  --uis-sidebar-group-mb: 1px;
+  --uis-sidebar-component-gap: var(--uis-space-6);
+  --uis-sidebar-component-pad-y: var(--uis-space-5);
+  --uis-sidebar-component-pad-r: var(--uis-space-14);
+  --uis-sidebar-component-pad-l: var(--uis-space-20);
+  --uis-sidebar-component-hover-bg: rgba(255, 255, 255, 0.06);
+
+  --uis-sidebar-arrow-font-size: 9px;
+  --uis-sidebar-arrow-rotate-open: 90deg;
+
+  --uis-sidebar-stories-pad-t: var(--uis-space-2);
+  --uis-sidebar-stories-pad-b: var(--uis-space-4);
+  --uis-sidebar-story-pad-y: var(--uis-space-4);
+  --uis-sidebar-story-pad-r: var(--uis-space-14);
+  --uis-sidebar-story-pad-l: var(--uis-space-42);
+
+  --uis-sidebar-empty-pad-y: var(--uis-space-20);
+  --uis-sidebar-empty-pad-x: var(--uis-space-14);
+
+  /* Controls */
+  --uis-control-font-size: var(--uis-font-size-md);
+  --uis-field-h: 32px;
+  --uis-field-pad-x: var(--uis-space-10);
+
+  --uis-switch-track-w: 38px;
+  --uis-switch-track-h: 20px;
+  --uis-switch-track-radius: 10px;
+  --uis-switch-thumb-size: 16px;
+  --uis-switch-thumb-offset: var(--uis-space-2);
+  --uis-switch-thumb-translate: 18px;
+  --uis-switch-thumb-radius: 50%;
+
+  --uis-multiselect-tags-gap: var(--uis-space-4);
+  --uis-multiselect-tags-mb: var(--uis-space-6);
+  --uis-multiselect-tags-min-h: 24px;
+  --uis-multiselect-tag-gap: var(--uis-space-4);
+  --uis-multiselect-tag-pad-y: var(--uis-space-2);
+  --uis-multiselect-tag-pad-x: var(--uis-space-8);
+  --uis-multiselect-tag-radius: 12px;
+  --uis-multiselect-tag-font-size: var(--uis-font-size-xs);
+  --uis-multiselect-tag-remove-font-size: 14px;
+
+  --uis-multiselect-options-gap: var(--uis-space-4);
+  --uis-multiselect-option-gap: var(--uis-space-4);
+  --uis-multiselect-option-pad-y: var(--uis-space-3);
+  --uis-multiselect-option-pad-x: var(--uis-space-8);
+  --uis-multiselect-option-font-size: var(--uis-font-size-sm);
+
+  /* Main */
+  --uis-main-pad: var(--uis-space-24);
+  --uis-empty-h: 300px;
+  --uis-empty-font-size: var(--uis-font-size-lg);
+
+  /* Story */
+  --uis-story-gap: var(--uis-space-20);
+
+  --uis-story-toolbar-gap: var(--uis-space-6);
+  --uis-story-toolbar-mb: var(--uis-space-8);
+
+  --uis-story-theme-btn-size: 28px;
+  --uis-story-theme-btn-border-w: 2px;
+  --uis-story-theme-btn-border-hover: var(--uis-border-black-alpha);
+
+  --uis-story-swatch-size: 18px;
+  --uis-story-swatch-radius: 3px;
+  --uis-story-swatch-border: var(--uis-border-black-alpha-soft);
+  --uis-story-swatch-checker-size: 8px;
+  --uis-story-swatch-checker-offset: 4px;
+
+  --uis-story-resizer-h: 200px;
+  --uis-story-resizer-pad-y: var(--uis-space-32);
+  --uis-story-resizer-pad-x: var(--uis-space-12);
+
+  --uis-story-resizer-checker-size: 20px;
+  --uis-story-resizer-checker-offset: 10px;
+
+  --uis-story-controls-pad-y: var(--uis-space-16);
+  --uis-story-controls-pad-x: var(--uis-space-20);
+
+  --uis-story-controls-title-mb: var(--uis-space-12);
+  --uis-story-controls-title-font-size: var(--uis-font-size-sm);
+  --uis-story-controls-title-letter-spacing: 0.5px;
+
+  --uis-story-control-row-gap: var(--uis-space-12);
+  --uis-story-control-row-pad-y: var(--uis-space-6);
+
+  --uis-story-control-label-w: 120px;
+  --uis-story-control-label-font-size: var(--uis-font-size-sm);
+}
+

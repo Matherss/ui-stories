@@ -1,0 +1,104 @@
+.uis-sidebar {
+  position: fixed;
+  top: var(--uis-header-h);
+  left: 0;
+  bottom: 0;
+  width: var(--uis-sidebar-w);
+  overflow-y: auto;
+  background: var(--uis-bg-sidebar);
+  color: var(--uis-text-sidebar);
+  padding: var(--uis-sidebar-pad-y) 0;
+}
+
+/* Directory level */
+.uis-sidebar__dir {
+  margin-bottom: var(--uis-sidebar-dir-mb);
+}
+
+.uis-sidebar__dir-header {
+  display: flex;
+  align-items: center;
+  gap: var(--uis-sidebar-dir-gap);
+  padding: var(--uis-sidebar-dir-pad-y) var(--uis-sidebar-dir-pad-x);
+  cursor: pointer;
+  font-size: var(--uis-sidebar-dir-font-size);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--uis-sidebar-dir-letter-spacing);
+  color: var(--uis-sidebar-dir-color);
+  user-select: none;
+  transition: color var(--uis-t-120);
+
+  &:hover {
+    color: var(--uis-sidebar-dir-color-hover);
+  }
+}
+
+.uis-sidebar__dir-body {
+  padding-bottom: var(--uis-sidebar-dir-body-pad-b);
+}
+
+/* Component level */
+.uis-sidebar__group {
+  margin-bottom: var(--uis-sidebar-group-mb);
+}
+
+.uis-sidebar__component {
+  display: flex;
+  align-items: center;
+  gap: var(--uis-sidebar-component-gap);
+  padding: var(--uis-sidebar-component-pad-y) var(--uis-sidebar-component-pad-r) var(--uis-sidebar-component-pad-y) var(--uis-sidebar-component-pad-l);
+  cursor: pointer;
+  font-size: var(--uis-font-size-md);
+  font-weight: 600;
+  user-select: none;
+  transition: background var(--uis-t-120);
+
+  &:hover {
+    background: var(--uis-sidebar-component-hover-bg);
+  }
+}
+
+.uis-sidebar__arrow {
+  display: inline-block;
+  font-size: var(--uis-sidebar-arrow-font-size);
+  transition: transform var(--uis-t-150);
+
+  .is-open > & {
+    transform: rotate(var(--uis-sidebar-arrow-rotate-open));
+  }
+}
+
+/* Story level */
+.uis-sidebar__stories {
+  padding: var(--uis-sidebar-stories-pad-t) 0 var(--uis-sidebar-stories-pad-b);
+}
+
+.uis-sidebar__story {
+  display: block;
+  width: 100%;
+  padding: var(--uis-sidebar-story-pad-y) var(--uis-sidebar-story-pad-r) var(--uis-sidebar-story-pad-y) var(--uis-sidebar-story-pad-l);
+  border: none;
+  background: transparent;
+  color: var(--uis-text-sidebar);
+  font-size: var(--uis-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--uis-t-120), color var(--uis-t-120);
+
+  &:hover {
+    background: var(--uis-sidebar-component-hover-bg);
+  }
+
+  &.is-active {
+    color: var(--uis-accent);
+    background: var(--uis-accent-bg);
+  }
+}
+
+.uis-sidebar__empty {
+  padding: var(--uis-sidebar-empty-pad-y) var(--uis-sidebar-empty-pad-x);
+  font-size: var(--uis-font-size-sm);
+  opacity: var(--uis-text-disabled-opacity);
+}
+
