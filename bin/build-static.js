@@ -37,6 +37,7 @@ async function main() {
     scssLoadPaths: config.scssLoadPaths,
     svgSpritePath: config.svgSpritePathBuild ?? config.svgSpritePath,
     autoImports: config.autoImports,
+    strings: config.strings,
     outDir,
     base,
   });

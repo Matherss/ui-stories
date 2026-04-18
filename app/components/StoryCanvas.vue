@@ -64,11 +64,12 @@ import ControlSelect from './controls/ControlSelect.vue';
 import ControlSwitch from './controls/ControlSwitch.vue';
 import ControlMultiselect from './controls/ControlMultiselect.vue';
 import ControlObject from './controls/ControlObject.vue';
+import { strings } from 'virtual:ui-stories-config';
 
 const themes = [
-  { id: 'light',    label: 'Светлая' },
-  { id: 'dark',     label: 'Тёмная' },
-  { id: 'checker',  label: 'Прозрачность' }
+  { id: 'light', label: strings.themeLight },
+  { id: 'dark', label: strings.themeDark },
+  { id: 'checker', label: strings.themeChecker },
 ];
 const theme = ref('light');
 

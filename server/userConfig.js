@@ -3,6 +3,16 @@ import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
+/** @type {Record<string, string>} */
+export const UI_STORIES_STRING_DEFAULTS = {
+  searchPlaceholder: 'Search components…',
+  emptySelection: 'Select a component from the sidebar',
+  emptySearchResults: 'No matches',
+  themeLight: 'Light',
+  themeDark: 'Dark',
+  themeChecker: 'Checkerboard',
+};
+
 export const UI_STORIES_DEFAULTS = {
   scanDirs: ['app/components'],
   styles: [],
@@ -31,9 +41,21 @@ export async function loadUiStoriesConfig(hostRoot) {
   else if (existsSync(configPathCjs)) resolvedPath = configPathCjs;
   else if (existsSync(configPathJs)) resolvedPath = configPathJs;
 
-  if (!resolvedPath) return { ...UI_STORIES_DEFAULTS };
+  if (!resolvedPath) {
+    return {
+      ...UI_STORIES_DEFAULTS,
+      scssAdditionalData: '',
+      strings: { ...UI_STORIES_STRING_DEFAULTS },
+    };
+  }
 
   const userConfig = await loadConfigModule(resolvedPath);
+  const strings = {
+    ...UI_STORIES_STRING_DEFAULTS,
+    ...(userConfig.strings && typeof userConfig.strings === 'object'
+      ? userConfig.strings
+      : {}),
+  };
 
   return {
     scanDirs: userConfig.scanDirs || UI_STORIES_DEFAULTS.scanDirs,
@@ -46,6 +68,7 @@ export async function loadUiStoriesConfig(hostRoot) {
     svgSpritePathDev: userConfig.svgSpritePathDev ?? UI_STORIES_DEFAULTS.svgSpritePathDev,
     svgSpritePathBuild: userConfig.svgSpritePathBuild ?? UI_STORIES_DEFAULTS.svgSpritePathBuild,
     autoImports: userConfig.autoImports || UI_STORIES_DEFAULTS.autoImports,
+    strings,
   };
 }
 

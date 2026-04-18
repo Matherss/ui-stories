@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { storiesGlobPlugin } from './storiesGlobPlugin.js';
 import { hostStylesPlugin, scopeFixPlugin } from './hostStylesPlugin.js';
 import { nuxtComponentResolver } from './nuxtComponentResolver.js';
+import { UI_STORIES_STRING_DEFAULTS } from './userConfig.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, '..', 'app');
@@ -21,6 +22,7 @@ const appRoot = resolve(__dirname, '..', 'app');
  *   scssLoadPaths?: string[],
  *   svgSpritePath?: string,
  *   autoImports?: string[],
+ *   strings?: Record<string, string>,
  * }} options
  */
 export function getStoriesViteConfig({
@@ -32,6 +34,7 @@ export function getStoriesViteConfig({
   scssLoadPaths = [],
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
+  strings = UI_STORIES_STRING_DEFAULTS,
 }) {
   const resolvedAlias = {};
   for (const [key, val] of Object.entries(alias)) {
@@ -52,7 +55,7 @@ export function getStoriesViteConfig({
 
     plugins: [
       vue(),
-      uiStoriesConfigPlugin({ svgSpritePath }),
+      uiStoriesConfigPlugin({ svgSpritePath, strings }),
       AutoImport({
         imports: ['vue', ...autoImports],
         dts: false,
@@ -101,6 +104,7 @@ export function getStoriesViteConfig({
  *   scssLoadPaths?: string[],
  *   svgSpritePath?: string,
  *   autoImports?: string[],
+ *   strings?: Record<string, string>,
  *   open?: boolean,
  * }} options
  */
@@ -114,6 +118,7 @@ export async function startStoriesServer({
   scssLoadPaths = [],
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
+  strings = UI_STORIES_STRING_DEFAULTS,
   open = false,
 }) {
   const inline = getStoriesViteConfig({
@@ -125,6 +130,7 @@ export async function startStoriesServer({
     scssLoadPaths,
     svgSpritePath,
     autoImports,
+    strings,
   });
 
   const server = await createServer({
@@ -151,6 +157,7 @@ export async function startStoriesServer({
  *   scssLoadPaths?: string[],
  *   svgSpritePath?: string,
  *   autoImports?: string[],
+ *   strings?: Record<string, string>,
  *   outDir: string,
  *   base?: string,
  * }} options
@@ -164,6 +171,7 @@ export async function buildStoriesStatic({
   scssLoadPaths = [],
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
+  strings = UI_STORIES_STRING_DEFAULTS,
   outDir,
   base = './',
 }) {
@@ -176,6 +184,7 @@ export async function buildStoriesStatic({
     scssLoadPaths,
     svgSpritePath,
     autoImports,
+    strings,
   });
 
   await build({
@@ -198,7 +207,7 @@ export async function buildStoriesStatic({
   });
 }
 
-function uiStoriesConfigPlugin({ svgSpritePath }) {
+function uiStoriesConfigPlugin({ svgSpritePath, strings }) {
   const VIRTUAL_ID = 'virtual:ui-stories-config';
   const RESOLVED_ID = '\0' + VIRTUAL_ID;
 
@@ -209,7 +218,8 @@ function uiStoriesConfigPlugin({ svgSpritePath }) {
     },
     load(id) {
       if (id !== RESOLVED_ID) return;
-      return `export const svgSpritePath = ${JSON.stringify(svgSpritePath)};`;
+      return `export const svgSpritePath = ${JSON.stringify(svgSpritePath)};
+export const strings = ${JSON.stringify(strings)};`;
     },
   };
 }

@@ -48,7 +48,7 @@
       </div>
 
       <div v-if="!Object.keys(tree).length" class="uis-sidebar__empty">
-        Ничего не найдено
+        {{ strings.emptySearchResults }}
       </div>
     </nav>
   </aside>
@@ -56,6 +56,7 @@
 
 <script setup>
 import { reactive, computed } from 'vue';
+import { strings } from 'virtual:ui-stories-config';
 
 const META_KEYS = new Set(['directory']);
 

@@ -62,10 +62,26 @@ export default {
 
   // Dev server port
   port: 6006,
+
+  // Optional: UI labels (English by default). Example: strings: { searchPlaceholder: '…' }
+  // See "UI strings" below for all keys.
 };
 ```
 
 All options are optional — sensible defaults are used when omitted.
+
+### UI strings (`strings`)
+
+The shell UI (search field, empty states, theme preview tooltips) uses English text by default. Set `strings` to customize labels; you can pass only the keys you need — the rest stay at their defaults.
+
+| Key | Default |
+|-----|---------|
+| `searchPlaceholder` | `Search components…` |
+| `emptySelection` | `Select a component from the sidebar` |
+| `emptySearchResults` | `No matches` |
+| `themeLight` | `Light` |
+| `themeDark` | `Dark` |
+| `themeChecker` | `Checkerboard` |
 
 ---
 

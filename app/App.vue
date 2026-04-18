@@ -6,7 +6,7 @@
         v-model="search"
         class="uis-header__search"
         type="text"
-        placeholder="Поиск компонента..."
+        :placeholder="strings.searchPlaceholder"
       />
     </header>
 
@@ -26,7 +26,7 @@
           :story="activeStoryDef"
         />
         <div v-else class="uis-empty">
-          Выберите компонент в боковом меню
+          {{ strings.emptySelection }}
         </div>
       </main>
     </div>
@@ -34,8 +34,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import allStories from 'virtual:stories';
+import { strings } from 'virtual:ui-stories-config';
 import StorySidebar from './components/StorySidebar.vue';
 import StoryCanvas from './components/StoryCanvas.vue';
 

@@ -10,4 +10,10 @@ export default {
   svgSpritePathDev: '/assets/sprite/',
   svgSpritePathBuild: '/public/assets/sprite/',
   port: 6006,
+
+  strings: {
+    themeLight: 'Light',
+    themeDark: 'Dark',
+    themeChecker: 'Chess ^_^',
+  },
 };

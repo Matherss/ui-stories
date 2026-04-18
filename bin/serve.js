@@ -18,6 +18,7 @@ async function main() {
     scssLoadPaths: config.scssLoadPaths,
     svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
     autoImports: config.autoImports,
+    strings: config.strings,
     open: true,
   });
 
