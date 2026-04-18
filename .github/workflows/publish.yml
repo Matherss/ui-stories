@@ -35,5 +35,14 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          
-      - run: pnpm publish --access public --no-git-checks --provenance
+
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *-* ]]; then
+            echo "Prerelease $VERSION → dist-tag beta"
+            pnpm publish --access public --no-git-checks --provenance --tag beta
+          else
+            echo "Stable $VERSION → dist-tag latest"
+            pnpm publish --access public --no-git-checks --provenance
+          fi
