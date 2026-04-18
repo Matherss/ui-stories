@@ -63,6 +63,10 @@ export default {
   // Dev server port
   port: 6006,
 
+  // Optional: extra sidebar links that open static “token” views (parsed from SCSS on the server).
+  // See "Optional pages (design tokens)" below.
+  optionalPages: [],
+
   // Optional: UI labels (English by default). Example: strings: { searchPlaceholder: '…' }
   // See "UI strings" below for all keys.
 };
@@ -82,6 +86,47 @@ The shell UI (search field, empty states, theme preview tooltips) uses English t
 | `themeLight` | `Light` |
 | `themeDark` | `Dark` |
 | `themeChecker` | `Checkerboard` |
+| `optionalPagesSection` | `Pages` |
+
+---
+
+## Optional pages (design tokens)
+
+**Experimental.** The shell can show extra sidebar items that render **read-only** views built from your SCSS: color swatches for `$variables`, typography rows for Sass `$` tokens, and **class-based** blocks (e.g. `.title-h1 { font-size: … }`) with a fixed “Lorem ipsum…” preview.
+
+- **Config:** each page has `id`, `title`, and `scssFiles` (paths **relative to the project root**, same idea as `scanDirs` / `styles`). List every file you need; `@use` / `@import` are **not** followed automatically.
+- **Navigation:** sidebar section **Pages** (label: `strings.optionalPagesSection`), URL hash `#__page__/<id>` (e.g. `#__page__/design-tokens`).
+- **CSS variables:** previews that use `var(--token)` must get those variables from styles you pass in **`styles`** (they are scoped to `.uis-story__preview`, same as story previews).
+
+### Minimal working example
+
+`ui-stories.config.mjs`:
+
+```javascript
+export default {
+  scanDirs: ['app/components'],
+  styles: ['app/assets/scss/main.scss'], // must define :root / tokens your SCSS references via var()
+  optionalPages: [
+    {
+      id: 'tokens',
+      title: 'Design tokens',
+      scssFiles: ['app/assets/scss/variables.scss'],
+    },
+  ],
+};
+```
+
+`app/assets/scss/variables.scss` (fragment):
+
+```scss
+$brand: #3366cc;
+
+:root {
+  --font-size-xl: 1.25rem;
+}
+```
+
+You get a **Pages → Design tokens** entry; the UI parses `$brand` and any other matching `$` entries, and shows colors (and other token types per built-in heuristics). For class-based typography previews, add a file with rules like `.heading { font-size: var(--font-size-xl); }` and include it in `scssFiles`, and ensure `--font-size-xl` exists in `styles`.
 
 ---
 

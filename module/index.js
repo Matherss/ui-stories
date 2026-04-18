@@ -45,6 +45,7 @@ export default defineNuxtModule({
           svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
           autoImports: config.autoImports,
           strings: config.strings,
+          optionalPages: config.optionalPages,
         });
 
         console.log(`\n  \x1b[36m[ui-stories]\x1b[0m ➜ http://localhost:${config.port}\n`);

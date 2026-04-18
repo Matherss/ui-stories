@@ -1,0 +1,59 @@
+// For test
+$tokens-blue-500: #2563eb;
+$color-primary: $tokens-blue-500;
+$color-secondary: #2563eb;
+$color-tertiary: #1d4ed8;
+
+$color-background: #f5f5f5;
+$color-background-sidebar: #1e1e2e;
+$color-background-controls: #ffffff;
+
+$color-text: #333333;
+$color-text-muted: #888888;
+$color-text-soft: #555555;
+$color-text-placeholder: rgba(255, 255, 255, 0.4);
+$color-text-sidebar: #cdd6f4;
+$color-text-inverse: #ffffff;
+
+:root {
+  --font-line-height-4xs: #{rem(12px)};
+  --font-line-height-3xs: #{rem(16px)};
+  --font-line-height-2xs: #{rem(18px)};
+  --font-line-height-xs: #{rem(20px)};
+  --font-line-height-sm: #{rem(24px)};
+  --font-line-height-md: #{rem(32px)};
+  --font-line-height-lg: #{rem(40px)};
+  --font-line-height-xl: #{rem(48px)};
+  --font-line-height-2xl: #{rem(48px)};
+  --font-line-height-4xs-mob: #{rem(11px)};
+  --font-line-height-3xs-mob: #{rem(14px)};
+  --font-line-height-2xs-mob: #{rem(16px)};
+  --font-line-height-xs-mob: #{rem(18px)};
+  --font-line-height-sm-mob: #{rem(24px)};
+  --font-line-height-md-mob: #{rem(24px)};
+  --font-line-height-lg-mob: #{rem(28px)};
+  --font-line-height-xl-mob: #{rem(36px)};
+  --font-line-height-2xl-mob: #{rem(36px)};
+  --font-size-2xs: #{rem(12px)};
+  --font-size-xs: #{rem(14px)};
+  --font-size-sm: #{rem(14px)};
+  --font-size-md: #{rem(16px)};
+  --font-size-lg: #{rem(18px)};
+  --font-size-xl: #{rem(20px)};
+  --font-size-2xl: #{rem(24px)};
+  --font-size-3xl: #{rem(32px)};
+  --font-size-4xl: #{rem(40px)};
+  --font-size-2xs-mob: #{rem(11px)};
+  --font-size-xs-mob: #{rem(12px)};
+  --font-size-sm-mob: #{rem(14px)};
+  --font-size-md-mob: #{rem(14px)};
+  --font-size-lg-mob: #{rem(16px)};
+  --font-size-xl-mob: #{rem(18px)};
+  --font-size-2xl-mob: #{rem(20px)};
+  --font-size-3xl-mob: #{rem(24px)};
+  --font-size-4xl-mob: #{rem(32px)};
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}

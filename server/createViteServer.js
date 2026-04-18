@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { storiesGlobPlugin } from './storiesGlobPlugin.js';
+import { optionalPagesPlugin } from './optionalPagesPlugin.js';
 import { hostStylesPlugin, scopeFixPlugin } from './hostStylesPlugin.js';
 import { nuxtComponentResolver } from './nuxtComponentResolver.js';
 import { UI_STORIES_STRING_DEFAULTS } from './userConfig.js';
@@ -23,6 +24,7 @@ const appRoot = resolve(__dirname, '..', 'app');
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
+ *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
  * }} options
  */
 export function getStoriesViteConfig({
@@ -35,6 +37,7 @@ export function getStoriesViteConfig({
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
   strings = UI_STORIES_STRING_DEFAULTS,
+  optionalPages = [],
 }) {
   const resolvedAlias = {};
   for (const [key, val] of Object.entries(alias)) {
@@ -65,6 +68,7 @@ export function getStoriesViteConfig({
         resolvers: [nuxtComponentResolver(resolvedScanDirs)],
       }),
       storiesGlobPlugin({ hostRoot, scanDirs }),
+      optionalPagesPlugin({ hostRoot, optionalPages }),
       hostStylesPlugin({ hostRoot, styles }),
     ],
 
@@ -105,6 +109,7 @@ export function getStoriesViteConfig({
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
+ *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
  *   open?: boolean,
  * }} options
  */
@@ -119,6 +124,7 @@ export async function startStoriesServer({
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
   strings = UI_STORIES_STRING_DEFAULTS,
+  optionalPages = [],
   open = false,
 }) {
   const inline = getStoriesViteConfig({
@@ -131,6 +137,7 @@ export async function startStoriesServer({
     svgSpritePath,
     autoImports,
     strings,
+    optionalPages,
   });
 
   const server = await createServer({
@@ -158,6 +165,7 @@ export async function startStoriesServer({
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
+ *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
  *   outDir: string,
  *   base?: string,
  * }} options
@@ -172,6 +180,7 @@ export async function buildStoriesStatic({
   svgSpritePath = '/assets/sprite/',
   autoImports = [],
   strings = UI_STORIES_STRING_DEFAULTS,
+  optionalPages = [],
   outDir,
   base = './',
 }) {
@@ -185,6 +194,7 @@ export async function buildStoriesStatic({
     svgSpritePath,
     autoImports,
     strings,
+    optionalPages,
   });
 
   await build({

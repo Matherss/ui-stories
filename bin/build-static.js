@@ -38,6 +38,7 @@ async function main() {
     svgSpritePath: config.svgSpritePathBuild ?? config.svgSpritePath,
     autoImports: config.autoImports,
     strings: config.strings,
+    optionalPages: config.optionalPages,
     outDir,
     base,
   });

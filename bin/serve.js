@@ -19,6 +19,7 @@ async function main() {
     svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
     autoImports: config.autoImports,
     strings: config.strings,
+    optionalPages: config.optionalPages,
     open: true,
   });
 

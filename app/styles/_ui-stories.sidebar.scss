@@ -10,6 +10,47 @@
   padding: var(--uis-sidebar-pad-y) 0;
 }
 
+.uis-sidebar__optional-wrap {
+  margin-bottom: var(--uis-sidebar-dir-mb);
+  padding: 0 var(--uis-sidebar-dir-pad-x) var(--uis-sidebar-dir-body-pad-b);
+  border-bottom: 1px solid var(--uis-sidebar-component-hover-bg);
+}
+
+.uis-sidebar__section-label {
+  padding: 0 0 var(--uis-sidebar-story-pad-y);
+  font-size: var(--uis-sidebar-dir-font-size);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--uis-sidebar-dir-letter-spacing);
+  color: var(--uis-sidebar-dir-color);
+  user-select: none;
+}
+
+.uis-sidebar__optional-item {
+  display: block;
+  width: 100%;
+  padding: var(--uis-sidebar-story-pad-y) var(--uis-sidebar-story-pad-r) var(--uis-sidebar-story-pad-y)
+    var(--uis-sidebar-story-pad-l);
+  margin-bottom: 2px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--uis-text-sidebar);
+  font-size: var(--uis-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--uis-t-120), color var(--uis-t-120);
+
+  &:hover {
+    background: var(--uis-sidebar-component-hover-bg);
+  }
+
+  &.is-active {
+    color: var(--uis-accent);
+    background: var(--uis-accent-bg);
+  }
+}
+
 /* Directory level */
 .uis-sidebar__dir {
   margin-bottom: var(--uis-sidebar-dir-mb);

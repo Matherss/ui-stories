@@ -11,6 +11,7 @@ export const UI_STORIES_STRING_DEFAULTS = {
   themeLight: 'Light',
   themeDark: 'Dark',
   themeChecker: 'Checkerboard',
+  optionalPagesSection: 'Pages',
 };
 
 export const UI_STORIES_DEFAULTS = {
@@ -23,6 +24,7 @@ export const UI_STORIES_DEFAULTS = {
   svgSpritePathDev: null,
   svgSpritePathBuild: null,
   autoImports: [],
+  optionalPages: [],
 };
 
 /**
@@ -44,6 +46,7 @@ export async function loadUiStoriesConfig(hostRoot) {
   if (!resolvedPath) {
     return {
       ...UI_STORIES_DEFAULTS,
+      optionalPages: [],
       scssAdditionalData: '',
       strings: { ...UI_STORIES_STRING_DEFAULTS },
     };
@@ -57,6 +60,10 @@ export async function loadUiStoriesConfig(hostRoot) {
       : {}),
   };
 
+  const optionalPages = Array.isArray(userConfig.optionalPages)
+    ? userConfig.optionalPages
+    : UI_STORIES_DEFAULTS.optionalPages;
+
   return {
     scanDirs: userConfig.scanDirs || UI_STORIES_DEFAULTS.scanDirs,
     styles: userConfig.styles || UI_STORIES_DEFAULTS.styles,
@@ -68,6 +75,7 @@ export async function loadUiStoriesConfig(hostRoot) {
     svgSpritePathDev: userConfig.svgSpritePathDev ?? UI_STORIES_DEFAULTS.svgSpritePathDev,
     svgSpritePathBuild: userConfig.svgSpritePathBuild ?? UI_STORIES_DEFAULTS.svgSpritePathBuild,
     autoImports: userConfig.autoImports || UI_STORIES_DEFAULTS.autoImports,
+    optionalPages,
     strings,
   };
 }

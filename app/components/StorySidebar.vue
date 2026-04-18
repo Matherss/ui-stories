@@ -2,6 +2,25 @@
   <aside class="uis-sidebar">
     <nav class="uis-sidebar__nav">
       <div
+        v-if="visibleOptionalPages.length"
+        class="uis-sidebar__optional-wrap"
+      >
+        <div class="uis-sidebar__section-label">
+          {{ strings.optionalPagesSection }}
+        </div>
+        <button
+          v-for="p in visibleOptionalPages"
+          :key="p.id"
+          type="button"
+          class="uis-sidebar__optional-item"
+          :class="{ 'is-active': activeOptionalId === p.id }"
+          @click="$emit('select-optional', p.id)"
+        >
+          {{ p.title }}
+        </button>
+      </div>
+
+      <div
         v-for="(components, dirName) in tree"
         :key="dirName"
         class="uis-sidebar__dir"
@@ -64,13 +83,22 @@ const props = defineProps({
   stories: { type: Object, required: true },
   search: { type: String, default: '' },
   activeComponent: { type: String, default: '' },
-  activeStory: { type: String, default: '' }
+  activeStory: { type: String, default: '' },
+  optionalPages: { type: Array, default: () => [] },
+  activeOptionalId: { type: String, default: '' },
 });
 
-defineEmits(['select']);
+defineEmits(['select', 'select-optional']);
 
 const openDirs = reactive({});
 const openGroups = reactive({});
+
+const visibleOptionalPages = computed(() => {
+  const q = props.search.toLowerCase().trim();
+  const pages = props.optionalPages;
+  if (!q) return pages;
+  return pages.filter((p) => String(p.title).toLowerCase().includes(q));
+});
 
 const tree = computed(() => {
   const q = props.search.toLowerCase().trim();
