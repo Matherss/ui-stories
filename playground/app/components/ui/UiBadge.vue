@@ -1,5 +1,5 @@
 <template>
-  <span class="ui-badge" :class="`ui-badge--${color}`">
+  <span class="ui-badge" :class="`ui-badge--${color}`" :style="badgeStyles">
     <slot />
   </span>
 </template>
@@ -8,6 +8,7 @@
 withDefaults(
   defineProps<{
     color?: 'gray' | 'green' | 'red' | 'blue' | 'yellow';
+    badgeStyles?: Record<string, string>;
   }>(),
   { color: 'gray' },
 );

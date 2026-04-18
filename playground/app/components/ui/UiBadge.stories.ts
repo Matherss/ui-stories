@@ -13,11 +13,18 @@ export const Default = {
       options: ['gray', 'green', 'red', 'blue', 'yellow'],
       default: 'gray',
     },
+    badgeStyles: {
+      type: 'object',
+      default: {
+        background: 'gray',
+        fontSize: '16px',
+      },
+    }
   },
 
   renderer: () => ({
     components: { UiBadge },
-    template: '<UiBadge :color="color">{{ text }}</UiBadge>',
+    template: '<UiBadge :color="color" :badgeStyles="badgeStyles">{{ text }}</UiBadge>',
   }),
 };
 

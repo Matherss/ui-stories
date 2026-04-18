@@ -26,6 +26,7 @@
         v-for="(def, propName) in story.propsChanger"
         :key="propName"
         class="uis-story__control-row"
+        :class="{ 'is-control-tall': def.type === 'object' }"
       >
         <label class="uis-story__control-label">{{ propName }}</label>
 
@@ -47,6 +48,10 @@
           v-model="propsState[propName]"
           :options="def.options"
         />
+        <ControlObject
+          v-else-if="def.type === 'object'"
+          v-model="propsState[propName]"
+        />
       </div>
     </div>
   </div>
@@ -58,6 +63,7 @@ import ControlInput from './controls/ControlInput.vue';
 import ControlSelect from './controls/ControlSelect.vue';
 import ControlSwitch from './controls/ControlSwitch.vue';
 import ControlMultiselect from './controls/ControlMultiselect.vue';
+import ControlObject from './controls/ControlObject.vue';
 
 const themes = [
   { id: 'light',    label: 'Светлая' },
@@ -85,6 +91,14 @@ function buildInitialState(propsChanger) {
       state[key] = def.default ?? false;
     } else if (def.type === 'multiselect') {
       state[key] = def.default ?? [];
+    } else if (def.type === 'object') {
+      const d = def.default;
+      state[key] =
+        d != null && typeof d === 'object'
+          ? structuredClone(d)
+          : {};
+    } else if (def.type === 'input' || def.type === 'select') {
+      state[key] = def.default ?? '';
     } else {
       state[key] = def.default ?? '';
     }

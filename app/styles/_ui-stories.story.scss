@@ -122,6 +122,14 @@
   &:last-child {
     border-bottom: none;
   }
+
+  &.is-control-tall {
+    align-items: flex-start;
+
+    .uis-story__control-label {
+      padding-top: var(--uis-space-8);
+    }
+  }
 }
 
 .uis-story__control-label {
