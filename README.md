@@ -187,9 +187,18 @@ interface Story {
 }
 ```
 
+### The `propsChanger` object
+
+`propsChanger` is an optional **map of control names to definitions** (`Record<string, ControlDef>`). It drives the **Controls** panel under the story preview.
+
+- **Keys** — labels in the Controls UI and the names of reactive refs injected into the story scope. Use valid identifiers so they work in the template (e.g. `title`, `badgeStyles`).
+- **Values** — control definitions: a `type` (`input`, `select`, `switch`, `multiselect`, or `object`), a `default` when applicable, and extra fields such as `options` for select-like controls.
+- **State** — each key is stored as reactive state; the preview component merges them into `setup()` (as refs), so you bind them like normal props: `{{ title }}`, `:disabled="disabled"`, `:badgeStyles="badgeStyles"`.
+- If `propsChanger` is omitted or `{}`, no Controls panel is shown (static stories only need `renderer`).
+
 ---
 
-## Control Types (`propsChanger`)
+## Control Types (`propsChanger` values / `ControlDef`)
 
 | Type          | Fields                        | Description                          |
 |---------------|-------------------------------|--------------------------------------|
@@ -197,6 +206,7 @@ interface Story {
 | `select`      | `options: string[]`, `default: string` | Dropdown select              |
 | `switch`      | `default: boolean`            | Toggle switch (true/false)           |
 | `multiselect` | `options: string[]`, `default: string[]` | Multiple selection with chips |
+| `object`      | `default: object`             | JSON-style editor for plain objects (initial value is deep-cloned) |
 
 Property names in `propsChanger` become reactive variables available in `template`
 via `{{ propName }}` and `:prop-name="propName"`.
