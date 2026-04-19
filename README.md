@@ -63,8 +63,7 @@ export default {
   // Dev server port
   port: 6006,
 
-  // Optional: extra sidebar links that open static “token” views (parsed from SCSS on the server).
-  // See "Optional pages (design tokens)" below.
+  // Optional: extra sidebar links that render your own Vue pages. See "Optional pages" below.
   optionalPages: [],
 
   // Optional: UI labels (English by default). Example: strings: { searchPlaceholder: '…' }
@@ -90,43 +89,48 @@ The shell UI (search field, empty states, theme preview tooltips) uses English t
 
 ---
 
-## Optional pages (design tokens)
+## Optional pages
 
-**Experimental.** The shell can show extra sidebar items that render **read-only** views built from your SCSS: color swatches for `$variables`, typography rows for Sass `$` tokens, and **class-based** blocks (e.g. `.title-h1 { font-size: … }`) with a fixed “Lorem ipsum…” preview.
+You can add extra sidebar entries under **Pages** (`strings.optionalPagesSection`) that open **your own Vue SFCs** in the main area — same shell (header, sidebar) as stories, but the content is entirely up to you.
 
-- **Config:** each page has `id`, `title`, and `scssFiles` (paths **relative to the project root**, same idea as `scanDirs` / `styles`). List every file you need; `@use` / `@import` are **not** followed automatically.
-- **Navigation:** sidebar section **Pages** (label: `strings.optionalPagesSection`), URL hash `#__page__/<id>` (e.g. `#__page__/design-tokens`).
-- **CSS variables:** previews that use `var(--token)` must get those variables from styles you pass in **`styles`** (they are scoped to `.uis-story__preview`, same as story previews).
+- **Config:** each entry has `id`, `title`, and `component`: a path to a `.vue` file **relative to the project root** (same style as `scanDirs` / `styles`).
+- **Navigation:** URL hash `#__page__/<id>` (e.g. `#__page__/design-tokens`).
+- **Styles:** global styles from **`styles`** in the config are still applied to the app shell; use normal Vue `<style>` / imports inside your page component for page-specific layout.
 
 ### Minimal working example
+
+`app/pages/MyTokensPage.vue`:
+
+```vue
+<template>
+  <div class="my-page">
+    <h1>Design tokens</h1>
+    <p>Define any markup, components, or documentation here.</p>
+  </div>
+</template>
+
+<style scoped>
+.my-page {
+  padding: 1rem;
+}
+</style>
+```
 
 `ui-stories.config.mjs`:
 
 ```javascript
 export default {
   scanDirs: ['app/components'],
-  styles: ['app/assets/scss/main.scss'], // must define :root / tokens your SCSS references via var()
+  styles: ['app/assets/scss/main.scss'],
   optionalPages: [
     {
       id: 'tokens',
       title: 'Design tokens',
-      scssFiles: ['app/assets/scss/variables.scss'],
+      component: 'app/pages/MyTokensPage.vue',
     },
   ],
 };
 ```
-
-`app/assets/scss/variables.scss` (fragment):
-
-```scss
-$brand: #3366cc;
-
-:root {
-  --font-size-xl: 1.25rem;
-}
-```
-
-You get a **Pages → Design tokens** entry; the UI parses `$brand` and any other matching `$` entries, and shows colors (and other token types per built-in heuristics). For class-based typography previews, add a file with rules like `.heading { font-size: var(--font-size-xl); }` and include it in `scssFiles`, and ensure `--font-size-xl` exists in `styles`.
 
 ---
 

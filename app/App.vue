@@ -23,10 +23,10 @@
       />
 
       <main class="uis-main">
-        <OptionalPageView
+        <component
           v-if="activeOptionalPage"
+          :is="activeOptionalPage.component"
           :key="'opt-' + activeOptionalId"
-          :page="activeOptionalPage"
         />
         <StoryCanvas
           v-else-if="activeStoryDef"
@@ -48,8 +48,6 @@ import optionalPagesData from 'virtual:optional-pages';
 import { strings } from 'virtual:ui-stories-config';
 import StorySidebar from './components/StorySidebar.vue';
 import StoryCanvas from './components/StoryCanvas.vue';
-import OptionalPageView from './components/OptionalPageView.vue';
-
 const stories = allStories;
 const search = ref('');
 const activeComponent = ref('');

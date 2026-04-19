@@ -24,7 +24,7 @@ const appRoot = resolve(__dirname, '..', 'app');
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
- *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
+ *   optionalPages?: { id: string, title: string, component: string }[],
  * }} options
  */
 export function getStoriesViteConfig({
@@ -109,7 +109,7 @@ export function getStoriesViteConfig({
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
- *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
+ *   optionalPages?: { id: string, title: string, component: string }[],
  *   open?: boolean,
  * }} options
  */
@@ -165,7 +165,7 @@ export async function startStoriesServer({
  *   svgSpritePath?: string,
  *   autoImports?: string[],
  *   strings?: Record<string, string>,
- *   optionalPages?: { id: string, title: string, scssFiles: string[] }[],
+ *   optionalPages?: { id: string, title: string, component: string }[],
  *   outDir: string,
  *   base?: string,
  * }} options
