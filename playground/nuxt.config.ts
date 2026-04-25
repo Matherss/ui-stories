@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   modules: ['ui-stories'],
 
   uiStories: {
-    enabled: process.env.UI_STORIES_ENABLE === '1',
+    enabled: true,
     route: '/__ui-stories',
     scanDirs: ['app/components'],
     styles: ['app/assets/scss/main.scss'],
