@@ -1,8 +1,16 @@
+// @ts-nocheck
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
+  app: {
+    // Used by `stories:build` to publish UI Stories under a subpath.
+    baseURL: process.env.UI_STORIES_BASE || '/',
+  },
+
   modules: ['ui-stories'],
 
   uiStories: {
-    enabled: true,
+    enabled: process.env.UI_STORIES_ENABLE === '1',
     route: '/__ui-stories',
     scanDirs: ['app/components'],
     styles: ['app/assets/scss/main.scss'],

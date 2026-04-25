@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
+    "stories:dev": "node ./scripts/stories-dev.mjs",
     "build": "nuxt build",
+    "stories:build": "node ./scripts/stories-build.mjs",
     "start": "nuxt start"
   },
   "dependencies": {
