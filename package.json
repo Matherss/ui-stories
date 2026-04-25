@@ -1,6 +1,6 @@
 {
   "name": "ui-stories",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "description": "Lightweight Storybook alternative for Vue / Nuxt projects",
   "license": "MIT",
