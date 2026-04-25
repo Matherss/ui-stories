@@ -6,17 +6,17 @@ const VIRTUAL_ID = 'virtual:stories';
 const RESOLVED_ID = '\0' + VIRTUAL_ID;
 
 /**
- * Vite plugin that collects all .stories.ts/.js files and exposes them
- * as a virtual module `virtual:stories`.
+ * Collects all `.stories.ts` / `.stories.js` files and exposes them as
+ * a virtual module `virtual:stories`.
  *
  * @param {{ hostRoot: string, scanDirs: string[] }} options
  */
-export function storiesGlobPlugin({ hostRoot, scanDirs }) {
+export function storiesVirtualPlugin({ hostRoot, scanDirs }) {
   /** @type {import('vite').ViteDevServer | null} */
   let server = null;
 
   return {
-    name: 'ui-stories:glob',
+    name: 'ui-stories:stories',
 
     resolveId(id) {
       if (id === VIRTUAL_ID) return RESOLVED_ID;
@@ -31,13 +31,11 @@ export function storiesGlobPlugin({ hostRoot, scanDirs }) {
       server = viteServer;
 
       const dirsToWatch = scanDirs.map((d) => resolve(hostRoot, d));
-
       for (const dir of dirsToWatch) {
         try {
           watch(dir, { recursive: true }, (_, filename) => {
             if (!filename) return;
             if (!filename.endsWith('.stories.ts') && !filename.endsWith('.stories.js')) return;
-
             const mod = server.moduleGraph.getModuleById(RESOLVED_ID);
             if (mod) {
               server.moduleGraph.invalidateModule(mod);
@@ -45,7 +43,7 @@ export function storiesGlobPlugin({ hostRoot, scanDirs }) {
             }
           });
         } catch {
-          // directory may not exist yet
+          // ignore
         }
       }
     },
@@ -66,15 +64,10 @@ async function buildVirtualModule(hostRoot, scanDirs) {
   for (let i = 0; i < files.length; i++) {
     const absPath = files[i].replace(/\\/g, '/');
     const relPath = relative(hostRoot, absPath).replace(/\\/g, '/');
-
-    const fileName = basename(absPath)
-      .replace(/\.stories\.(ts|js)$/, '');
-
+    const fileName = basename(absPath).replace(/\.stories\.(ts|js)$/, '');
     const varName = `m${i}`;
     imports.push(`import * as ${varName} from '${absPath}';`);
-    entries.push(
-      `  '${fileName}': { filePath: '${relPath}', exports: ${varName} }`
-    );
+    entries.push(`  '${fileName}': { filePath: '${relPath}', exports: ${varName} }`);
   }
 
   return [
@@ -87,3 +80,4 @@ async function buildVirtualModule(hostRoot, scanDirs) {
     'export default stories;',
   ].join('\n');
 }
+

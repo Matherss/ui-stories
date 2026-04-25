@@ -1,6 +1,6 @@
 # UI Stories
 
-Lightweight Storybook alternative for Vue / Nuxt projects. Runs as a standalone Vite SPA on port `6006`.
+Lightweight Storybook alternative for **Nuxt** projects. Runs **inside your Nuxt app** as a dev/prod route.
 
 ## Installation
 
@@ -11,64 +11,57 @@ pnpm add -D ui-stories
 ## Quick Start
 
 ```bash
-# Standalone CLI (without Nuxt)
-npx ui-stories
-
-# Or add a script to package.json and run
-pnpm stories
+# Install
+pnpm add -D ui-stories
 ```
 
-Create `ui-stories.config.mjs` (recommended) in your project root and start writing `.stories.ts` files.
+Register the module and enable UI Stories:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['ui-stories'],
+  uiStories: {
+    enabled: process.env.UI_STORIES_ENABLE === '1',
+  },
+})
+```
+
+Open `http://localhost:<port>/__ui-stories` (default route).
+You can preselect a story via query param:
+
+- `__ui-stories?uis=UiButton/Default`
 
 ---
 
-## Configuration (`ui-stories.config.mjs`)
+## Configuration (in `nuxt.config.ts`)
 
-If your project does **not** have `"type": "module"` in `package.json`, using `.mjs` avoids Node warnings.
-Alternatively you can use `ui-stories.config.cjs` for CommonJS.
+```ts
+export default defineNuxtConfig({
+  modules: ['ui-stories'],
+  uiStories: {
+    // Enable/disable module features (route + virtual modules).
+    enabled: process.env.UI_STORIES_ENABLE === '1',
 
-```javascript
-export default {
-  // Directories to scan for .stories.ts/.js files
-  scanDirs: ['app/components'],
+    // Route where the UI Stories UI is mounted.
+    route: '/__ui-stories',
 
-  // Host project CSS/SCSS to include (scoped to story preview)
-  styles: ['app/assets/scss/main.scss'],
+    // Directories (relative to project root) to scan for `.stories.ts` / `.stories.js` files.
+    scanDirs: ['app/components'],
 
-  // SCSS additionalData (mixins/variables prepended to every SCSS file)
-  scssAdditionalData: '',
+    // Host project CSS/SCSS to include (scoped to story preview).
+    styles: ['app/assets/scss/main.scss'],
 
-  // SCSS loadPaths for @use / @import resolution
-  scssLoadPaths: ['app/assets/scss'],
+    // Base path for SVG sprite <use href="...">
+    svgSpritePath: '/assets/sprite/',
 
-  // Path aliases (resolved relative to project root)
-  alias: {
-    '~': 'app',
-    '@': 'app',
+    // Optional: extra sidebar links that render your own Vue pages.
+    optionalPages: [],
+
+    // Optional: UI labels (English by default). Example: strings: { searchPlaceholder: '…' }
+    // See "UI strings" below for all keys.
+    strings: {},
   },
-
-  // Base path for SVG sprite <use href="...">
-  svgSpritePath: '/assets/sprite/',
-
-  // Optional per-mode overrides:
-  // - dev server (Vite serves `<hostRoot>/public` at `/`)
-  svgSpritePathDev: '/assets/sprite/',
-  // - static build/preview (host `public` is copied to `<outDir>/public`)
-  svgSpritePathBuild: '/public/assets/sprite/',
-
-  // Auto-import presets (e.g. '@vueuse/core', 'pinia')
-  // 'vue' is always included automatically
-  autoImports: ['@vueuse/core'],
-
-  // Dev server port
-  port: 6006,
-
-  // Optional: extra sidebar links that render your own Vue pages. See "Optional pages" below.
-  optionalPages: [],
-
-  // Optional: UI labels (English by default). Example: strings: { searchPlaceholder: '…' }
-  // See "UI strings" below for all keys.
-};
+})
 ```
 
 All options are optional — sensible defaults are used when omitted.
@@ -150,27 +143,15 @@ The module reads `~/app` and `@/app` aliases from Nuxt conventions and can pick 
 
 ### Production
 
-UI Stories **does not participate in `nuxt build`** and must be built/served separately.
-
-Build a static bundle:
-
-```bash
-# from your project root
-npx ui-stories-build --outDir dist/ui-stories --base /ui-stories/
-```
-
-Preview it locally (or run as a standalone Node process behind Nginx):
-
-```bash
-npx ui-stories-preview dist/ui-stories
-```
+If `uiStories.enabled` is `true` during `nuxt build`, the UI Stories route is built and served
+as part of your Nuxt output. Make sure to protect the route appropriately (e.g. behind auth)
+before enabling it in production.
 
 ---
 
 ## `.stories.ts` File Format
 
 Each `.stories.ts` (or `.stories.js`) file is an ES module with **named exports**.
-
 ### Meta Exports
 
 | Export      | Type     | Description                                              |

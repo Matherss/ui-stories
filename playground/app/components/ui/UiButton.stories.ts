@@ -1,4 +1,5 @@
 import UiButton from './UiButton.vue';
+import { defineComponent, h } from 'vue';
 
 export const directory = '/ui/';
 
@@ -24,30 +25,42 @@ export const Default = {
     },
   },
 
-  renderer: () => ({
-    components: { UiButton },
-    template: `
-      <UiButton
-        :variant="variant"
-        :size="size"
-        :disabled="disabled"
-      >
-        {{ text }}
-      </UiButton>
-    `,
-  }),
+  renderer: ({ args }: any) =>
+    defineComponent({
+      setup() {
+        return () =>
+          h(
+            UiButton,
+            {
+              variant: args.variant,
+              size: args.size,
+              disabled: args.disabled,
+            },
+            () => args.text,
+          );
+      },
+    }),
 };
 
 export const AllVariants = {
-  renderer: () => ({
-    components: { UiButton },
-    template: `
-      <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-        <UiButton variant="default">Default</UiButton>
-        <UiButton variant="primary">Primary</UiButton>
-        <UiButton variant="outline">Outline</UiButton>
-        <UiButton variant="primary" disabled>Disabled</UiButton>
-      </div>
-    `,
-  }),
+  renderer: () =>
+    defineComponent({
+      setup() {
+        return () =>
+          h(
+            'div',
+            {
+              style:
+                'display: flex; gap: 12px; flex-wrap: wrap; align-items: center;',
+            },
+            [
+              h(UiButton, { variant: 'default' }, () => 'Default'),
+              h(UiButton, { variant: 'primary' }, () => 'Primary'),
+              h(UiButton, { variant: 'outline' }, () => 'Outline'),
+              h(UiButton, { variant: 'primary', disabled: true }, () => 'Disabled'),
+            ],
+          );
+      },
+    }),
 };
+

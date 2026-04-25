@@ -4,12 +4,12 @@ const VIRTUAL_ID = 'virtual:host-styles';
 const RESOLVED_ID = '\0virtual-host-styles.scss';
 
 /**
- * Vite plugin that generates a virtual SCSS module wrapping all host styles
+ * Generates a virtual SCSS module wrapping all host styles
  * inside `.uis-story__preview` so they don't leak into the UI shell.
  *
  * @param {{ hostRoot: string, styles: string[] }} options
  */
-export function hostStylesPlugin({ hostRoot, styles }) {
+export function hostStylesVirtualPlugin({ hostRoot, styles }) {
   return {
     name: 'ui-stories:host-styles',
 
@@ -19,7 +19,6 @@ export function hostStylesPlugin({ hostRoot, styles }) {
 
     load(id) {
       if (id !== RESOLVED_ID) return;
-
       if (!styles.length) return '/* no host styles configured */';
 
       const loads = styles.map((stylePath) => {
@@ -55,7 +54,6 @@ export function scopeFixPlugin() {
       });
 
       if (changed) {
-        // Deduplicate selectors (e.g. "html, body" both become the same)
         rule.selectors = [...new Set(fixed)];
       }
     },
@@ -63,3 +61,4 @@ export function scopeFixPlugin() {
 }
 
 scopeFixPlugin.postcss = true;
+

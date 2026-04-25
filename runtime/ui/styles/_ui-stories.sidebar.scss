@@ -1,0 +1,83 @@
+.uis-sidebar {
+  position: fixed;
+  top: var(--uis-header-h);
+  left: 0;
+  bottom: 0;
+  width: var(--uis-sidebar-w);
+  overflow-y: auto;
+  background: var(--uis-bg-sidebar);
+  color: var(--uis-text-sidebar);
+  padding: var(--uis-sidebar-pad-y) 0;
+}
+
+.uis-sidebar__section {
+  padding: 0 var(--uis-sidebar-dir-pad-x) var(--uis-sidebar-dir-body-pad-b);
+}
+
+.uis-sidebar__title {
+  padding: var(--uis-sidebar-dir-pad-y) 0;
+  font-size: var(--uis-sidebar-dir-font-size);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--uis-sidebar-dir-letter-spacing);
+  color: var(--uis-sidebar-dir-color);
+  user-select: none;
+}
+
+.uis-sidebar__item,
+.uis-sidebar__story {
+  display: block;
+  width: 100%;
+  padding: var(--uis-sidebar-story-pad-y) var(--uis-sidebar-story-pad-r) var(--uis-sidebar-story-pad-y)
+    var(--uis-sidebar-story-pad-l);
+  margin-bottom: 2px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--uis-text-sidebar);
+  font-size: var(--uis-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--uis-t-120), color var(--uis-t-120);
+
+  &:hover {
+    background: var(--uis-sidebar-component-hover-bg);
+  }
+
+  &.is-active {
+    color: var(--uis-accent);
+    background: var(--uis-accent-bg);
+  }
+}
+
+.uis-sidebar__group {
+  margin-bottom: var(--uis-sidebar-dir-mb);
+}
+
+.uis-sidebar__group-title {
+  margin-top: var(--uis-space-8);
+  padding: var(--uis-sidebar-dir-pad-y) 0 var(--uis-space-4);
+  font-size: var(--uis-sidebar-dir-font-size);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--uis-sidebar-dir-letter-spacing);
+  color: var(--uis-sidebar-dir-color);
+}
+
+.uis-sidebar__component-title {
+  padding: var(--uis-sidebar-component-pad-y) var(--uis-sidebar-component-pad-r) var(--uis-sidebar-component-pad-y) 0;
+  font-size: var(--uis-font-size-md);
+  font-weight: 600;
+  user-select: none;
+}
+
+.uis-sidebar__component {
+  padding-left: var(--uis-sidebar-component-pad-l);
+}
+
+.uis-sidebar__empty {
+  padding: var(--uis-sidebar-empty-pad-y) 0;
+  font-size: var(--uis-font-size-sm);
+  opacity: var(--uis-text-disabled-opacity);
+}
+

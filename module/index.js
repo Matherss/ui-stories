@@ -1,6 +1,8 @@
-import { defineNuxtModule } from '@nuxt/kit';
-import { resolve } from 'node:path';
-import { loadUiStoriesConfig } from '../server/userConfig.js';
+import { defineNuxtModule, createResolver, extendPages } from '@nuxt/kit';
+import { storiesVirtualPlugin } from './vite/storiesVirtualPlugin.js';
+import { optionalPagesVirtualPlugin } from './vite/optionalPagesVirtualPlugin.js';
+import { hostStylesVirtualPlugin, scopeFixPlugin } from './vite/hostStylesVirtualPlugin.js';
+import { uiStoriesConfigPlugin } from './vite/uiStoriesConfigPlugin.js';
 
 export default defineNuxtModule({
   meta: {
@@ -8,50 +10,56 @@ export default defineNuxtModule({
     configKey: 'uiStories',
   },
 
-  async setup(moduleOptions, nuxt) {
-    // Important: this module must not affect production builds.
-    // UI Stories is intended to be built/served separately in production.
+  defaults: {
+    enabled: true,
+    route: '/__ui-stories',
+    scanDirs: ['app/components'],
+    styles: [],
+    svgSpritePath: '/assets/sprite/',
+    optionalPages: [],
+    strings: {},
+  },
 
+  async setup(options, nuxt) {
+    const enabled = Boolean(options.enabled);
+    if (!enabled) return;
+
+    const resolver = createResolver(import.meta.url);
     const hostRoot = nuxt.options.rootDir;
-    const config = await loadUiStoriesConfig(hostRoot);
 
-    const nuxtAlias = {
-      '~': resolve(hostRoot, 'app'),
-      '@': resolve(hostRoot, 'app'),
-    };
-
-    const mergedAlias = { ...nuxtAlias, ...config.alias };
-
-    const scssAdditionalData = config.scssAdditionalData
-      || nuxt.options.vite?.css?.preprocessorOptions?.scss?.additionalData
-      || '';
-    const scssLoadPaths = config.scssLoadPaths.length
-      ? config.scssLoadPaths
-      : nuxt.options.vite?.css?.preprocessorOptions?.scss?.loadPaths || [];
-
-    // Dev: run standalone UI Stories server alongside Nuxt dev server.
-    if (nuxt.options.dev) {
-      nuxt.hook('listen', async () => {
-        const { startStoriesServer } = await import('../server/createViteServer.js');
-
-        await startStoriesServer({
-          hostRoot,
-          scanDirs: config.scanDirs,
-          styles: config.styles,
-          port: config.port,
-          alias: mergedAlias,
-          scssAdditionalData,
-          scssLoadPaths,
-          svgSpritePath: config.svgSpritePathDev ?? config.svgSpritePath,
-          autoImports: config.autoImports,
-          strings: config.strings,
-          optionalPages: config.optionalPages,
-        });
-
-        console.log(`\n  \x1b[36m[ui-stories]\x1b[0m ➜ http://localhost:${config.port}\n`);
+    // Add a Nuxt page for the UI Stories shell.
+    extendPages((pages) => {
+      pages.push({
+        name: 'ui-stories',
+        path: options.route || '/__ui-stories',
+        file: resolver.resolve('../runtime/pages/ui-stories.vue'),
       });
+    });
 
-      return;
-    }
+    // Inject Vite plugins to provide virtual modules in Nuxt context.
+    nuxt.hook('vite:extendConfig', (config) => {
+      // Stories in `.stories.ts` use `template: '...'` strings, which require
+      // Vue runtime compiler.
+      // config.resolve ||= {};
+      // config.resolve.alias ||= {};
+      // config.resolve.alias.vue = 'vue/dist/vue.esm-bundler.js';
+      // config.resolve.dedupe = ['vue','vue/compiler-sfc','vue/compiler-dom','vue/runtime-dom','vue/runtime-core', '@vue/runtime-dom', '@vue/runtime-core'];
+
+      config.plugins ||= [];
+      config.plugins.push(
+        uiStoriesConfigPlugin({
+          svgSpritePath: options.svgSpritePath || '/assets/sprite/',
+          strings: options.strings || {},
+        }),
+        storiesVirtualPlugin({ hostRoot, scanDirs: options.scanDirs || ['app/components'] }),
+        optionalPagesVirtualPlugin({ hostRoot, optionalPages: options.optionalPages || [] }),
+        hostStylesVirtualPlugin({ hostRoot, styles: options.styles || [] }),
+      );
+
+      config.css ||= {};
+      config.css.postcss ||= {};
+      config.css.postcss.plugins ||= [];
+      config.css.postcss.plugins.push(scopeFixPlugin());
+    });
   },
 });

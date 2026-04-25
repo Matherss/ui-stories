@@ -9,6 +9,10 @@
       <UiButton variant="primary">Primary button</UiButton>
       <UiButton variant="outline" size="lg">Large outline</UiButton>
     </div>
+
+    <div>
+      <NuxtLink to="/__ui-stories">UI Stories</NuxtLink>
+    </div>
   </div>
 </template>
 

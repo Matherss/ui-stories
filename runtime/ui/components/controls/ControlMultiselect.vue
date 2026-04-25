@@ -52,7 +52,8 @@ function toggle(opt) {
 function remove(opt) {
   emit(
     'update:modelValue',
-    props.modelValue.filter((v) => v !== opt)
+    props.modelValue.filter((v) => v !== opt),
   );
 }
 </script>
+

@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────────
-   UI Stories — styles entrypoint
+   UI Stories — styles entrypoint (Nuxt runtime)
    ─────────────────────────────────────────────────── */
 
 @use 'ui-stories.fonts' as *;
@@ -11,3 +11,4 @@
 @use 'ui-stories.main' as *;
 @use 'ui-stories.story' as *;
 @use 'ui-stories.controls' as *;
+

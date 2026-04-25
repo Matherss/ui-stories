@@ -1,4 +1,5 @@
 import UiBadge from './UiBadge.vue';
+import { defineComponent, h } from 'vue';
 
 export const directory = '/ui/';
 
@@ -19,26 +20,39 @@ export const Default = {
         background: 'gray',
         fontSize: '16px',
       },
-    }
+    },
   },
 
-  renderer: () => ({
-    components: { UiBadge },
-    template: '<UiBadge :color="color" :badgeStyles="badgeStyles">{{ text }}</UiBadge>',
-  }),
+  renderer: ({ args }: any) =>
+    defineComponent({
+      setup() {
+        return () =>
+          h(
+            UiBadge,
+            { color: args.color, badgeStyles: args.badgeStyles },
+            () => args.text,
+          );
+      },
+    }),
 };
 
 export const AllColors = {
-  renderer: () => ({
-    components: { UiBadge },
-    template: `
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <UiBadge color="gray">Gray</UiBadge>
-        <UiBadge color="green">Green</UiBadge>
-        <UiBadge color="red">Red</UiBadge>
-        <UiBadge color="blue">Blue</UiBadge>
-        <UiBadge color="yellow">Yellow</UiBadge>
-      </div>
-    `,
-  }),
+  renderer: () =>
+    defineComponent({
+      setup() {
+        return () =>
+          h(
+            'div',
+            { style: 'display: flex; gap: 8px; flex-wrap: wrap;' },
+            [
+              h(UiBadge, { color: 'gray' }, () => 'Gray'),
+              h(UiBadge, { color: 'green' }, () => 'Green'),
+              h(UiBadge, { color: 'red' }, () => 'Red'),
+              h(UiBadge, { color: 'blue' }, () => 'Blue'),
+              h(UiBadge, { color: 'yellow' }, () => 'Yellow'),
+            ],
+          );
+      },
+    }),
 };
+

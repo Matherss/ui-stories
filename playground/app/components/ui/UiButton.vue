@@ -3,12 +3,15 @@
     class="ui-button"
     :class="[`ui-button--${variant}`, `ui-button--${size}`]"
     :disabled="disabled"
+    :data-has-nuxt="String(!!nuxtApp)"
   >
     <slot />
   </button>
 </template>
 
 <script setup lang="ts">
+const nuxtApp = useNuxtApp();
+
 withDefaults(
   defineProps<{
     variant?: 'default' | 'primary' | 'outline';

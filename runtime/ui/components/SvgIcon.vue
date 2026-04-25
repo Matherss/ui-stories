@@ -17,7 +17,7 @@ const props = defineProps({
   name: { type: String, default: '' },
   width: { type: [Number, String], default: 24 },
   height: { type: [Number, String], default: 24 },
-  color: { type: String, default: '' }
+  color: { type: String, default: '' },
 });
 
 const spriteHref = computed(() => {
@@ -36,3 +36,4 @@ svg {
   fill: currentColor;
 }
 </style>
+

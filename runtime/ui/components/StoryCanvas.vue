@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, defineComponent, toRefs } from 'vue';
+import { ref, reactive, computed, toRefs } from 'vue';
 import ControlInput from './controls/ControlInput.vue';
 import ControlSelect from './controls/ControlSelect.vue';
 import ControlSwitch from './controls/ControlSwitch.vue';
@@ -74,14 +74,16 @@ const themes = [
 const theme = ref('light');
 
 const props = defineProps({
-  story: { type: Object, required: true }
+  story: { type: Object, required: true },
 });
 
+const story = props.story;
+
 const hasControls = computed(
-  () => props.story.propsChanger && Object.keys(props.story.propsChanger).length > 0
+  () => story.propsChanger && Object.keys(story.propsChanger).length > 0,
 );
 
-const propsState = reactive(buildInitialState(props.story.propsChanger));
+const propsState = reactive(buildInitialState(story.propsChanger));
 
 function buildInitialState(propsChanger) {
   const state = {};
@@ -107,14 +109,12 @@ function buildInitialState(propsChanger) {
   return state;
 }
 
-const storyDef = props.story.renderer();
-const renderedComponent = defineComponent({
-  components: storyDef.components || {},
-  setup() {
-    const controlRefs = toRefs(propsState);
-    const custom = typeof storyDef.setup === 'function' ? storyDef.setup() : {};
-    return { ...controlRefs, ...custom };
-  },
-  template: storyDef.template
-});
+const controlRefs = toRefs(propsState);
+const rendered = story.renderer({ args: propsState, refs: controlRefs });
+const renderedComponent = computed(() =>
+  rendered && typeof rendered === 'object' && 'component' in rendered
+    ? rendered.component
+    : rendered,
+);
 </script>
+

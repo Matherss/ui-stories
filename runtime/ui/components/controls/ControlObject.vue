@@ -122,6 +122,7 @@ watch(
     text.value = formatValue(v);
     parseError.value = '';
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 );
 </script>
+

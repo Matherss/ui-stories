@@ -1,6 +1,5 @@
 import { resolve } from 'node:path';
-import { existsSync } from 'node:fs';
-import { watch } from 'node:fs';
+import { existsSync, watch } from 'node:fs';
 
 const VIRTUAL_ID = 'virtual:optional-pages';
 const RESOLVED_ID = '\0' + VIRTUAL_ID;
@@ -10,9 +9,11 @@ const RESOLVED_ID = '\0' + VIRTUAL_ID;
  */
 
 /**
+ * Exposes optional pages list as a virtual module `virtual:optional-pages`.
+ *
  * @param {{ hostRoot: string, optionalPages?: OptionalPageConfig[] }} options
  */
-export function optionalPagesPlugin({ hostRoot, optionalPages = [] }) {
+export function optionalPagesVirtualPlugin({ hostRoot, optionalPages = [] }) {
   /** @type {import('vite').ViteDevServer | null} */
   let server = null;
 
@@ -48,10 +49,6 @@ export function optionalPagesPlugin({ hostRoot, optionalPages = [] }) {
   };
 }
 
-/**
- * @param {string} hostRoot
- * @param {OptionalPageConfig[]} pages
- */
 function collectWatchedFiles(hostRoot, pages) {
   /** @type {string[]} */
   const out = [];
@@ -64,10 +61,6 @@ function collectWatchedFiles(hostRoot, pages) {
   return out;
 }
 
-/**
- * @param {string} hostRoot
- * @param {OptionalPageConfig[]} pages
- */
 async function buildVirtualModule(hostRoot, pages) {
   const imports = [];
   const entries = [];
@@ -80,9 +73,7 @@ async function buildVirtualModule(hostRoot, pages) {
     }
     const rel = page?.component;
     if (!rel || typeof rel !== 'string') {
-      console.warn(
-        `[ui-stories] optional page "${page.id}": missing "component" (path to a .vue file relative to project root)`
-      );
+      console.warn(`[ui-stories] optional page "${page.id}": missing "component" (path to a .vue file relative to project root)`);
       continue;
     }
     const abs = resolve(hostRoot, rel);
@@ -94,11 +85,10 @@ async function buildVirtualModule(hostRoot, pages) {
     const absPath = abs.replace(/\\/g, '/');
     const varName = `OptionalPage${i}`;
     imports.push(`import ${varName} from ${JSON.stringify(absPath)};`);
-    entries.push(
-      `  { id: ${JSON.stringify(String(page.id))}, title: ${JSON.stringify(String(page.title))}, component: ${varName} }`
-    );
+    entries.push(`  { id: ${JSON.stringify(String(page.id))}, title: ${JSON.stringify(String(page.title))}, component: ${varName} }`);
     i++;
   }
 
   return [...imports, '', 'export default [', entries.join(',\n'), '];', ''].join('\n');
 }
+
