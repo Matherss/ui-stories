@@ -35,7 +35,7 @@ export default defineNuxtModule({
         file: resolver.resolve('../runtime/pages/ui-stories.vue'),
         // Do not rely on `definePageMeta` macro inside node_modules.
         // Mark the page as client-only at the route level.
-        meta: { ssr: false },
+        meta: { ssr: false, layout: false },
       });
     });
 
