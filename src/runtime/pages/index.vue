@@ -4,6 +4,7 @@ import { computed, provide } from 'vue'
 import {
   uisVariantSourcesKey,
 } from '../inject-keys'
+import { useRoute, useRuntimeConfig } from '#imports'
 const route = useRoute()
 const config = useRuntimeConfig()
 
