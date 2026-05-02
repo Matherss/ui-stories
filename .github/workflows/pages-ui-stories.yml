@@ -24,15 +24,17 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build UI Stories (static)
+      - name: Generate static site (Nuxt)
         working-directory: playground
-        run: pnpm stories:build -- --outDir ../dist/ui-stories --base "/${{ github.event.repository.name }}/"
+        env:
+          NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+        run: pnpm generate
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/ui-stories
+          path: playground/.output/public
   deploy:
     runs-on: ubuntu-latest
     needs: build

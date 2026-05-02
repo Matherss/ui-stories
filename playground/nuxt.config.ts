@@ -1,33 +1,7 @@
-// @ts-nocheck
-import { defineNuxtConfig } from 'nuxt/config';
-
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  app: {
-    // Used by `stories:build` to publish UI Stories under a subpath.
-    baseURL: process.env.UI_STORIES_BASE || '/',
-  },
-
-  modules: ['ui-stories'],
-
-  uiStories: {
-    enabled: true,
-    route: '/__ui-stories',
-    scanDirs: ['app/components'],
-    styles: ['app/assets/scss/main.scss'],
-    svgSpritePath: '/assets/sprite/',
-    optionalPages: [
-      {
-        id: 'optional-page-example',
-        title: 'Optional page example',
-        component: 'stories-optional-pages/OptionalPageExample.vue',
-      },
-    ],
-    strings: {
-      themeLight: 'Light',
-      themeDark: 'Dark',
-      themeChecker: 'Chess ^_^',
-    },
-  },
-
-  compatibilityDate: '2025-01-01',
-});
+  compatibilityDate: '2025-07-15',
+  devtools: { enabled: true },
+  modules: ['../src/module'],
+  css: ['./assets/styles.css'],
+})

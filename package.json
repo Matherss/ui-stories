@@ -1,13 +1,24 @@
 {
   "name": "ui-stories",
   "version": "0.5.5",
+  "description": "Nuxt module for creating a component workshop",
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "type": "module",
-  "description": "Lightweight Storybook alternative for Vue / Nuxt projects",
-  "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Matherss/ui-stories.git"
   },
+  "scripts": {
+    "release": "bumpp",
+    "prepack": "nuxt-module-build build",
+    "play-dev": "pnpm --filter playground dev"
+  },
+  "author": "Ilya Konyakhin <https://github.com/Matherss>",
+  "license": "MIT",
   "packageManager": "pnpm@10.33.0",
   "keywords": [
     "vue",
@@ -17,32 +28,35 @@
     "components",
     "dev-tools"
   ],
-  "main": "./index.js",
   "exports": {
-    ".": "./index.js",
-    "./module": "./module/index.js"
-  },
-  "scripts": {
-    "release": "bumpp",
-    "stories:dev": "pnpm -C playground stories:dev",
-    "stories:build": "pnpm -C playground stories:build"
-  },
-  "files": [
-    "module",
-    "runtime",
-    "index.js"
-  ],
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "@parcel/watcher"
-    ]
-  },
-  "dependencies": {
-    "fast-glob": "^3.3.3",
-    "sass-embedded": "^1.77.6"
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.mjs"
+    },
+    "./runtime/utils": {
+      "types": "./dist/runtime/utils/index.d.ts",
+      "import": "./dist/runtime/utils/index.js"
+    }
   },
   "devDependencies": {
-    "bumpp": "^11.0.1"
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.4.2",
+    "bumpp": "^11.0.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
+    "vue": "^3.5.33",
+    "vue-tsc": "^3.2.7"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.4.2",
+    "@vue/compiler-dom": "^3.5.33",
+    "@vueuse/core": "^14.3.0",
+    "shiki": "^4.0.2",
+    "tinyglobby": "^0.2.16"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.0.0",
+    "vue": "^3.5.0"
   }
 }

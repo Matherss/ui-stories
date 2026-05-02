@@ -1,20 +1,20 @@
 {
-  "name": "ui-stories-playground",
-  "private": true,
+  "name": "playground",
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "nuxt dev",
-    "stories:dev": "node ./scripts/stories-dev.mjs",
     "build": "nuxt build",
-    "stories:build": "node ./scripts/stories-build.mjs",
-    "start": "nuxt start"
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "^4.0.0",
-    "vue": "^3.5.0"
+    "nuxt": "^4.4.2",
+    "vue": "^3.5.32",
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "ui-stories": "workspace:*",
-    "sass-embedded": "^1.77.6"
+    "ui-stories": "workspace:*"
   }
 }
