@@ -4,7 +4,12 @@ import { computed, provide } from 'vue'
 import {
   uisVariantSourcesKey,
 } from '../inject-keys'
-import { useRoute, useRuntimeConfig } from '#imports'
+import { definePageMeta, useRoute, useRuntimeConfig } from '#imports'
+
+definePageMeta({
+  layout: false,
+})
+
 const route = useRoute()
 const config = useRuntimeConfig()
 
