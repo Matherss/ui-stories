@@ -2,13 +2,12 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "strict": true,
     "declaration": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "outDir": "./dist",
     "types": ["node"]
   },
   "include": [
