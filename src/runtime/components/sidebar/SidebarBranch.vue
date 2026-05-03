@@ -45,8 +45,12 @@ const pad = (d: number) => `${10 + d * 12}px`
           :style="{ paddingLeft: pad(depth) }"
           @click="toggle(node.key)"
         >
-          <span class="uis-tree-chevron" :class="{ 'uis-tree-chevron--open': isOpen(node.key) }">›</span>
           <span>{{ node.label }}</span>
+           <span class="uis-tree-chevron" :class="{ 'uis-tree-chevron--open': isOpen(node.key) }">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="#3A3B3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
         </button>
         <SidebarBranch
           v-show="isOpen(node.key)"
@@ -77,6 +81,7 @@ const pad = (d: number) => `${10 + d * 12}px`
 .uis-tree-group-btn {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   width: 100%;
   border: none;
@@ -95,15 +100,16 @@ const pad = (d: number) => `${10 + d * 12}px`
 }
 
 .uis-tree-chevron {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transform: rotate(0deg);
   transition: transform 0.15s ease;
   color: #94a3b8;
-  width: 14px;
 }
 
 .uis-tree-chevron--open {
-  transform: rotate(90deg);
+  transform: rotate(180deg);
 }
 
 </style>

@@ -4,7 +4,6 @@
       <UIStoriesContent>
         <slot />
       </UIStoriesContent>
-      <UIStoriesControls />
     </div>
   </ClientOnly>
 </template>

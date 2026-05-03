@@ -268,7 +268,5 @@ function onResizeDown(e: PointerEvent, axis: ResizeAxis) {
 
 .uis-variant-controls {
   padding: 16px;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
 }
 </style>

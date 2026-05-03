@@ -18,6 +18,8 @@ import { useControls } from '../../../src/runtime/utils'
 
 const controls = useControls({
   variant: { type: 'select', options: ['primary', 'secondary'], default: 'primary' },
+  isDisabled: { type: 'boolean', default: false },
+  label: { type: 'text', default: 'Button' },
 })
 </script>
 
@@ -36,8 +38,8 @@ const controls = useControls({
     </UIStoriesVariant>
 
     <UIStoriesVariant title="Editable">
-      <Button :variant="controls.variant.value as string">
-        Editable variant prop
+      <Button :variant="controls.variant.value" :is-disabled="controls.isDisabled.value">
+        {{ controls.label.value }}
       </Button>
     </UIStoriesVariant>
   </UIStoriesStory>

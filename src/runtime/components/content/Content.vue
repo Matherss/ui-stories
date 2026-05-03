@@ -45,6 +45,8 @@ const tags = computed(() => meta.value?.tags ?? [])
       </button>
     </div>
 
+    <UIStoriesControls />
+
     <UIStoriesContentDescription
       v-if="descriptionItems.length"
       :items="descriptionItems"
@@ -56,7 +58,7 @@ const tags = computed(() => meta.value?.tags ?? [])
 .uis-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   min-width: 0;
 }
 

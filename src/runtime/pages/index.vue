@@ -5,6 +5,7 @@ import {
   uisVariantSourcesKey,
 } from '../inject-keys'
 import { definePageMeta, useRoute, useRuntimeConfig } from '#imports'
+import Block from '../components/ui/Block.vue'
 
 definePageMeta({
   layout: false,
@@ -55,19 +56,27 @@ provide(uisVariantSourcesKey, variantSourcesList)
 <template>
   <ClientOnly>
     <div class="uis-root">
-      <UIStoriesSidebar
-        :story-ids="storiesIds"
-        :stories-meta="storiesMeta"
-        :current-id="storyId"
-        :base-path="basePath"
-      />
-      <main class="uis-main">
-        <component :is="story" v-if="story" />
-        <div v-else class="uis-empty">
-          Select a story in the sidebar
-        </div>
-      </main>
-      <UIStoriesCode v-if="story" />
+      <div class="uis-container">
+        <Block>
+          <UIStoriesSidebar
+            :story-ids="storiesIds"
+            :stories-meta="storiesMeta"
+            :current-id="storyId"
+            :base-path="basePath"
+          />
+        </Block>
+        <Block stretch>
+          <main class="uis-main">
+            <component :is="story" v-if="story" />
+            <div v-else class="uis-empty">
+              Select a story in the sidebar
+            </div>
+          </main>
+        </Block>
+        <Block v-if="story">
+          <UIStoriesCode v-if="story" />
+        </Block>
+      </div>
     </div>
   </ClientOnly>
 </template>
@@ -82,15 +91,22 @@ provide(uisVariantSourcesKey, variantSourcesList)
 }
 
 .uis-root {
-  display: flex;
-  min-height: 100dvh;
   background: var(--uis-bg);
+  padding: 24px 0;
+  min-height: 100dvh;
+}
+
+.uis-container {
+  display: flex;
+
+  max-width: 90dvw;
+  margin: 0 auto;
+  gap: 8px;
 }
 
 .uis-main {
   flex: 1;
   min-width: 0;
-  padding: 24px 28px;
   display: flex;
   flex-direction: column;
 }

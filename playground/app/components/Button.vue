@@ -1,11 +1,12 @@
 <script setup lang="ts">
 defineProps<{
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary',
+  isDisabled?: boolean,
 }>()
 </script>
 
 <template>
-  <button type="button" :class="['btn', variant === 'secondary' ? 'btn--secondary' : 'btn--primary']">
+  <button type="button" :class="['btn', variant === 'secondary' ? 'btn--secondary' : 'btn--primary', isDisabled ? 'btn--disabled' : '']">
     <slot />
   </button>
 </template>
@@ -107,5 +108,10 @@ defineProps<{
 .btn--secondary:disabled {
   color: rgb(0 0 0 / 26%);
   border-color: rgb(0 0 0 / 12%);
+}
+
+.btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

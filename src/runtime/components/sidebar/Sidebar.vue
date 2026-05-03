@@ -136,15 +136,9 @@ function toggle(key: string) {
 
 <style scoped>
 .uis-sidebar {
-  width: 260px;
-  min-width: 260px;
-  height: 100dvh;
-  padding: 20px 16px;
-  background: #fff;
-  border-right: 1px solid var(--uis-border, #e2e8f0);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
 }
 
 .uis-sidebar-nav {

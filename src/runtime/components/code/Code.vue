@@ -114,7 +114,6 @@ watch(
 .uis-code {
   width: 30dvw;
   flex-shrink: 0;
-  height: 100dvh;
   padding: 20px 16px 20px 12px;
   display: flex;
   flex-direction: column;
