@@ -14,6 +14,7 @@ const props = defineProps({
 
 <style scoped>
 .uis-block {
+  max-width: 100%;
   padding: 24px;
   border-radius: 32px;
   background: var(--uis-surface);

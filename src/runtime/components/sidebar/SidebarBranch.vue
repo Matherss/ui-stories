@@ -45,7 +45,12 @@ const pad = (d: number) => `${10 + d * 12}px`
           :style="{ paddingLeft: pad(depth) }"
           @click="toggle(node.key)"
         >
-          <span>{{ node.label }}</span>
+          <div class="uis-tree-group-btn-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M9.16667 15.8333H4.16667C3.72464 15.8333 3.30072 15.6577 2.98816 15.3452C2.67559 15.0326 2.5 14.6087 2.5 14.1667V5.00001C2.5 4.55798 2.67559 4.13406 2.98816 3.8215C3.30072 3.50894 3.72464 3.33334 4.16667 3.33334H7.5L10 5.83334H15.8333C16.2754 5.83334 16.6993 6.00894 17.0118 6.3215C17.3244 6.63406 17.5 7.05798 17.5 7.50001V10.8333M16.6667 17.5L18.3333 15.8333L16.6667 14.1667M14.1667 14.1667L12.5 15.8333L14.1667 17.5" stroke="#3A3B3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ node.label }}</span>
+          </div>
            <span class="uis-tree-chevron" :class="{ 'uis-tree-chevron--open': isOpen(node.key) }">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path d="M5 7.5L10 12.5L15 7.5" stroke="#3A3B3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -75,28 +80,34 @@ const pad = (d: number) => `${10 + d * 12}px`
 }
 
 .uis-tree-nested {
-  margin-top: 2px;
+  margin-top: 16px;
 }
 
 .uis-tree-group-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
   width: 100%;
   border: none;
   background: transparent;
   text-align: left;
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
+  
   color: #334155;
   cursor: pointer;
 }
 
-.uis-tree-group-btn:hover {
-  background: #f8fafc;
+.uis-tree-group-btn-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    font-family: var(--uis-font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
 }
 
 .uis-tree-chevron {
@@ -104,7 +115,6 @@ const pad = (d: number) => `${10 + d * 12}px`
   justify-content: center;
   align-items: center;
   transform: rotate(0deg);
-  transition: transform 0.15s ease;
   color: #94a3b8;
 }
 

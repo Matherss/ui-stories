@@ -49,7 +49,6 @@
 .uis-content-description,
 .uis-story .uis-control-object,
 .uis-variant-header,
-.uis-canvas-fs,
 .uis-content-themes {
   font-family: var(--uis-font-sans);
   color: var(--uis-text);

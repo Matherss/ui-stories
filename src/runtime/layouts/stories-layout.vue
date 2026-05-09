@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { stories, storiesMeta, storyVariantSources } from 'virtual:stories'
 import { computed, provide } from 'vue'
-import {
-  uisVariantSourcesKey,
-} from '../inject-keys'
 import { definePageMeta, useRoute, useRuntimeConfig } from '#imports'
 import Block from '../components/ui/Block.vue'
+import { uisVariantSourcesKey } from '../inject-keys'
 
 definePageMeta({
   layout: false,
@@ -51,6 +49,8 @@ const variantSourcesList = computed(() => {
   return storyVariantSources[id] ?? []
 })
 provide(uisVariantSourcesKey, variantSourcesList)
+
+provide('uis-story', story)
 </script>
 
 <template>
@@ -65,14 +65,7 @@ provide(uisVariantSourcesKey, variantSourcesList)
             :base-path="basePath"
           />
         </Block>
-        <Block stretch>
-          <main class="uis-main">
-            <component :is="story" v-if="story" />
-            <div v-else class="uis-empty">
-              Select a story in the sidebar
-            </div>
-          </main>
-        </Block>
+        <NuxtPage />
         <Block v-if="story">
           <UIStoriesCode v-if="story" />
         </Block>
@@ -98,23 +91,12 @@ provide(uisVariantSourcesKey, variantSourcesList)
 
 .uis-container {
   display: flex;
+  flex-wrap: wrap;
 
-  max-width: 90dvw;
+  width: 100%;
+  max-width: 1800px;
+  padding: 0 24px;
   margin: 0 auto;
   gap: 8px;
-}
-
-.uis-main {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.uis-empty {
-  margin: auto;
-  padding: 40px;
-  text-align: center;
-  font-size: 15px;
 }
 </style>

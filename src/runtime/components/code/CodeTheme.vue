@@ -25,6 +25,8 @@ const shikiTheme = defineModel<UIShikiTheme>('shikiTheme', { required: true })
 <style scoped>
 .uis-codeblock-theme-btns {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
 }
 
 .uis-codeblock-theme-btn {

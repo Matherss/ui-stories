@@ -39,10 +39,6 @@ const tags = computed(() => meta.value?.tags ?? [])
       <div class="uis-canvas-body">
         <slot />
       </div>
-
-      <button type="button" class="uis-canvas-fs" title="Fullscreen">
-        ⛶
-      </button>
     </div>
 
     <UIStoriesControls />
@@ -59,7 +55,7 @@ const tags = computed(() => meta.value?.tags ?? [])
   display: flex;
   flex-direction: column;
   gap: 24px;
-  min-width: 0;
+  min-width: 320px;
 }
 
 .uis-content-head {
@@ -98,7 +94,7 @@ const tags = computed(() => meta.value?.tags ?? [])
   border-color: #1e293b;
 }
 
-.uis-canvas--grid .uis-canvas-body {
+.uis-canvas--grid :deep(.uis-variant-preview-inner) {
   background-image:
     linear-gradient(rgb(148 163 184 / 25%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(148 163 184 / 25%) 1px, transparent 1px);
@@ -161,26 +157,12 @@ const tags = computed(() => meta.value?.tags ?? [])
 }
 
 .uis-canvas-body {
-  padding: 56px 24px 48px;
+  padding: 12px;
   border-radius: 20px;
   min-height: 220px;
-}
 
-.uis-canvas-fs {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 10px;
-  background: rgb(248 250 252 / 90%);
-  color: #64748b;
-  cursor: pointer;
-}
-
-.uis-canvas--dark .uis-canvas-fs {
-  background: rgb(30 41 59 / 90%);
-  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 </style>

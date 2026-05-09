@@ -108,8 +108,9 @@ watch(
 
 <style scoped>
 .uis-code {
-  width: 30dvw;
-  flex-shrink: 0;
+  width: 500px;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;

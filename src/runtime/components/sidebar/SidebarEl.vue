@@ -27,7 +27,7 @@ defineProps<{
   text-decoration: none;
   background: transparent;
 
-  transition: background .3s ease-in-out;
+  transition: background .2s ease-in-out;
 }
 
 .uis-sidebar-el--active {

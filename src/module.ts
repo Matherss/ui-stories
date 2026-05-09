@@ -102,11 +102,18 @@ export default defineNuxtModule<ModuleOptions>({
 
     extendPages((pages) => {
       pages.push({
-        name: 'ui-stories-index',
-        path: options.route + '/:id?',
-        file: resolver.resolve('./runtime/pages/index.vue'),
+        name: 'ui-stories',
+        path: options.route,
+        file: resolver.resolve('./runtime/layouts/stories-layout.vue'),
+        children: [
+          {
+            name: 'ui-stories-story',
+            path: ':id?',
+            file: resolver.resolve('./runtime/pages/stories-view.vue'),
+          },
+        ],
       })
-      uisLog(`added stories page at ${options.route + '/:id?'}`, 'info')
+      uisLog(`added stories page at ${options.route}/:id? (nested layout)`, 'info')
     })
 
     nuxt.options.runtimeConfig.public.uiStories = {
