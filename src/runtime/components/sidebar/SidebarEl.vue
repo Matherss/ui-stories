@@ -20,20 +20,17 @@ defineProps<{
 <style scoped>
 .uis-sidebar-el {
   display: block;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 8px 16px;
+  border-radius: 8px;
   font-size: 14px;
   color: #475569;
   text-decoration: none;
-}
+  background: transparent;
 
-.uis-sidebar-el:hover {
-  background: #f8fafc;
+  transition: background .3s ease-in-out;
 }
 
 .uis-sidebar-el--active {
-  background: #e0f2fe;
-  color: #0369a1;
-  font-weight: 500;
+  background: #F7F7F7;
 }
 </style>

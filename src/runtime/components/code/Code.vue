@@ -88,22 +88,18 @@ watch(
 </script>
 
 <template>
-  <aside class="uis-code">
+  <div class="uis-code">
     <div class="uis-code-head">
-      <p class="uis-code-lead">
-        <span v-if="hasSnippet" class="uis-code-variant">Code</span>
-        <span v-else class="uis-code-hint">No code in story</span>
-      </p>
+      <UIStoriesCodeTheme v-model:shiki-theme="shikiTheme" />
       <UIStoriesFigmaLink v-if="meta?.figma" :href="meta.figma" />
     </div>
-
+    
     <UIStoriesCodeblock
-      v-model:shiki-theme="shikiTheme"
       :highlighted-html="highlightedHtml"
       :highlight-error="highlightError"
       :has-snippet="hasSnippet"
     />
-  </aside>
+  </div>
 </template>
 
 <style>
@@ -114,38 +110,15 @@ watch(
 .uis-code {
   width: 30dvw;
   flex-shrink: 0;
-  padding: 20px 16px 20px 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #f8fafc;
-  border-left: 1px solid var(--uis-border, #e2e8f0);
+  gap: 24px;
 }
 
 .uis-code-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-}
-
-.uis-code-lead {
-  margin: 0;
-  min-width: 0;
-  flex: 1;
-}
-
-.uis-code-variant {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.uis-code-hint {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: #94a3b8;
 }
 </style>

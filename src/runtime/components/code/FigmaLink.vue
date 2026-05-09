@@ -16,32 +16,28 @@ withDefaults(
     rel="noopener noreferrer"
   >
     {{ label }}
-    <span class="uis-figma-link-icon" aria-hidden="true">↗</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M9.16667 7.5L11.6667 10L9.16667 12.5M10 2.5C16 2.5 17.5 4 17.5 10C17.5 16 16 17.5 10 17.5C4 17.5 2.5 16 2.5 10C2.5 4 4 2.5 10 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </a>
 </template>
 
 <style scoped>
 .uis-figma-link {
-  flex-shrink: 0;
+  width: fit-content;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
-  border-radius: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
   background: #fff;
-  border: 1px solid var(--uis-border, #e2e8f0);
-  font-size: 13px;
-  font-weight: 600;
-  color: #0f172a;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--uis-text);
   text-decoration: none;
 }
 
 .uis-figma-link:hover {
-  background: #f8fafc;
-}
-
-.uis-figma-link-icon {
-  font-size: 12px;
-  color: #94a3b8;
+  color: var(--uis-accent-text);
 }
 </style>
