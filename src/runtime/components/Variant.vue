@@ -92,8 +92,8 @@
             :key="w"
             type="button"
             class="uis-variant-preset"
-            :class="[{ 'uis-variant-preset--active': previewWidth === w }]"
-            :aria-pressed="previewWidth === w"
+            :class="[{ 'uis-variant-preset--active': previewSize.w === w }]"
+            :aria-pressed="previewSize.w === w"
             @click="setPresetWidth(w)"
           >
             {{ w }}
@@ -151,8 +151,33 @@ const previewPadding = ref(0)
 const previewJustify = ref<'flex-start' | 'center' | 'flex-end'>('center')
 const previewAlign = ref<'flex-start' | 'center' | 'flex-end'>('center')
 
+const previewSize = computed(() => {
+  const w = Math.round(previewMeasuredWidth.value)
+  const h = Math.round(previewMeasuredHeight.value)
+  return {
+    w: Number.isFinite(w) ? w : 0,
+    h: Number.isFinite(h) ? h : 0,
+  }
+})
+
+const defaultMaxWidth = computed(() => {
+  // "Default container width" = parent width minus preview paddings (content box width)
+  // so presets don't disappear after user resizes smaller.
+  // Re-compute on resize via previewMeasuredWidth dependency.
+  void previewMeasuredWidth.value
+
+  const el = previewEl.value
+  const parent = el?.parentElement
+  if (!el || !parent)
+    return previewMeasuredWidth.value
+
+  const style = window.getComputedStyle(el)
+  const padX = (Number.parseFloat(style.paddingLeft) || 0) + (Number.parseFloat(style.paddingRight) || 0)
+  return Math.max(0, parent.clientWidth - padX)
+})
+
 const PRESET_WIDTHS = computed(() => {
-  return [320, 768, 1024].filter(w => w <= previewMeasuredWidth.value)
+  return [320, 768, 1024].filter(w => w <= defaultMaxWidth.value)
 })
 
 const { width: previewMeasuredWidth, height: previewMeasuredHeight } = useElementSize(previewEl)
@@ -174,18 +199,39 @@ const previewInnerStyle = computed(() => {
 })
 
 const previewSizeLabel = computed(() => {
-  const w = Math.round(previewMeasuredWidth.value)
-  const h = Math.round(previewMeasuredHeight.value)
+  const { w, h } = previewSize.value
   if (w === undefined || h === undefined || isNaN(w) || isNaN(h))
     return ''
   return `${w}×${h}`
 })
 
+function getPreviewPadX() {
+  const el = previewEl.value
+  if (!el || typeof window === 'undefined')
+    return 0
+  const style = window.getComputedStyle(el)
+  return (Number.parseFloat(style.paddingLeft) || 0) + (Number.parseFloat(style.paddingRight) || 0)
+}
+
+function getPreviewPadY() {
+  const el = previewEl.value
+  if (!el || typeof window === 'undefined')
+    return 0
+  const style = window.getComputedStyle(el)
+  return (Number.parseFloat(style.paddingTop) || 0) + (Number.parseFloat(style.paddingBottom) || 0)
+}
+
 function setPresetWidth(w: number) {
   const el = previewEl.value
   const parent = el?.parentElement
-  const maxW = parent ? parent.clientWidth : Number.POSITIVE_INFINITY
-  previewWidth.value = Math.min(w, maxW)
+  const maxBorderW = parent ? parent.clientWidth : Number.POSITIVE_INFINITY
+
+  // `useElementSize(previewEl)` measures the content box width.
+  // `.uis-variant-preview` uses `box-sizing: border-box` with horizontal padding,
+  // so to get an exact measured (content) width of `w`, we must set border-box width to `w + padX`.
+  const padX = getPreviewPadX()
+  const targetBorderW = w + padX
+  previewWidth.value = Math.min(targetBorderW, maxBorderW)
 }
 
 type ResizeAxis = 'x' | 'y'
@@ -202,8 +248,17 @@ function onResizeDown(e: PointerEvent, axis: ResizeAxis) {
 
   const startX = e.clientX
   const startY = e.clientY
-  const startW = previewWidth.value ?? Math.round(previewMeasuredWidth.value) ?? 0
-  const startH = previewHeight.value ?? Math.round(previewMeasuredHeight.value) ?? 0
+  const padX = getPreviewPadX()
+  const padY = getPreviewPadY()
+
+  // `previewMeasuredWidth/Height` are content-box sizes, while `previewWidth/Height`
+  // (used in `previewStyle`) are border-box sizes. Convert on first interaction to avoid a jump.
+  const startW = previewWidth.value ?? ((Math.round(previewMeasuredWidth.value) || 0) + padX)
+  const startH = previewHeight.value ?? ((Math.round(previewMeasuredHeight.value) || 0) + padY)
+
+  // Lock the initial controlled size so the first pointermove doesn't cause a snap.
+  previewWidth.value = startW
+  previewHeight.value = startH
 
   const parent = el.parentElement
   const maxW = parent ? parent.clientWidth : Number.POSITIVE_INFINITY
