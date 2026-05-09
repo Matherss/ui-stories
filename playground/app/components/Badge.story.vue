@@ -53,7 +53,7 @@ const controls = useControls({
     </UIStoriesVariant>
 
     <UIStoriesVariant title="Editable">
-      <Badge :variant="controls.variant.value as 'default' | 'success' | 'warning' | 'info'">
+      <Badge :variant="controls.variant.value">
         {{ controls.variant.value }}
       </Badge>
     </UIStoriesVariant>

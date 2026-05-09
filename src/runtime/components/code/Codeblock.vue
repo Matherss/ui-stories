@@ -34,15 +34,26 @@ defineProps<{
 
 .uis-codeblock-shiki-wrap {
   min-height: 120px;
+  min-width: 0;
+}
+
+.uis-codeblock-shiki {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .uis-codeblock-shiki :deep(pre.shiki) {
   margin: 0;
   padding: 14px 16px;
-  border-radius: 14px;
   font-size: 12px;
   line-height: 1.55;
-  overflow-x: auto;
+  border-radius: 16px;
+  /* Shiki inserts newlines between `<span class="line">` nodes; `pre` defaults to
+     `white-space: pre`, which renders those as extra blank lines. Normalize
+     whitespace and keep one visual row per `.line` via `display: block`. */
+  white-space: normal;
+  overflow-x: hidden;
+  max-width: 100%;
   border: 1px solid rgb(15 23 42 / 6%);
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-feature-settings: 'liga' 1, 'calt' 1;
@@ -50,11 +61,17 @@ defineProps<{
 
 .uis-codeblock-shiki :deep(pre.shiki code) {
   font-family: inherit;
+  white-space: normal;
 }
 
 .uis-codeblock-shiki :deep(.line) {
   display: block;
   min-height: 1.55em;
+  /* `white-space: normal` on `pre` collapses leading spaces to nothing; per-line
+     `pre-wrap` keeps indentation and wraps long lines without a horizontal scrollbar. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .uis-codeblock-shiki--error :deep(pre.shiki) {
@@ -68,8 +85,11 @@ defineProps<{
   background: #f8fafc;
   font-size: 12px;
   line-height: 1.55;
-  overflow-x: auto;
-  white-space: pre;
+  overflow-x: hidden;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   border: 1px solid var(--uis-border, #e2e8f0);
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-feature-settings: 'liga' 1, 'calt' 1;
