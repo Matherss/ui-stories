@@ -1,144 +1,150 @@
 <template>
-  <div class="uis-variant">
-    <div class="uis-variant-header">
-      <h3 v-if="$slots.title || title" class="uis-variant-title">
-        <slot name="title">{{ title }}</slot>
-      </h3>
+  <ContextMenu>
+    <template #trigger>
+      <div class="uis-variant">
+        <div class="uis-variant-header">
+          <h3 v-if="$slots.title || title" class="uis-variant-title">
+            <slot name="title">{{ title }}</slot>
+          </h3>
+          
+          <div class="uis-variant-size-controls">
+            <div class="uis-variant-presets" role="group" aria-label="Preview width presets">
+              <button
+                v-for="w in PRESET_WIDTHS"
+                :key="w"
+                type="button"
+                class="uis-variant-preset"
+                :class="[{ 'uis-variant-preset--active': previewSize.w === w }]"
+                :aria-pressed="previewSize.w === w"
+                @click="setPresetWidth(w)"
+              >
+                {{ w }}
+              </button>
       
-      <div class="uis-variant-tools">
-        <div class="uis-variant-align" role="group" aria-label="Preview content alignment">
-          <div class="uis-variant-align-group" role="group" aria-label="Horizontal align">
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewJustify === 'flex-start' }"
-              :aria-pressed="previewJustify === 'flex-start'"
-              title="Align left"
-              @click="previewJustify = 'flex-start'"
-            >
-              L
-            </button>
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewJustify === 'center' }"
-              :aria-pressed="previewJustify === 'center'"
-              title="Align center"
-              @click="previewJustify = 'center'"
-            >
-              C
-            </button>
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewJustify === 'flex-end' }"
-              :aria-pressed="previewJustify === 'flex-end'"
-              title="Align right"
-              @click="previewJustify = 'flex-end'"
-            >
-              R
-            </button>
-          </div>
-          <div class="uis-variant-align-group" role="group" aria-label="Vertical align">
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewAlign === 'flex-start' }"
-              :aria-pressed="previewAlign === 'flex-start'"
-              title="Align top"
-              @click="previewAlign = 'flex-start'"
-            >
-              T
-            </button>
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewAlign === 'center' }"
-              :aria-pressed="previewAlign === 'center'"
-              title="Align middle"
-              @click="previewAlign = 'center'"
-            >
-              M
-            </button>
-            <button
-              type="button"
-              class="uis-variant-mini"
-              :class="{ 'uis-variant-mini--active': previewAlign === 'flex-end' }"
-              :aria-pressed="previewAlign === 'flex-end'"
-              title="Align bottom"
-              @click="previewAlign = 'flex-end'"
-            >
-              B
-            </button>
+              <button class="uis-variant-preset" @click="setPresetWidth(999999)">Max</button>
+            </div>
+            <span v-if="previewSizeLabel" class="uis-variant-size">
+              {{ previewSizeLabel }}
+            </span>
           </div>
         </div>
-        <label class="uis-variant-pad" aria-label="Preview padding">
-          <span class="uis-variant-pad-label">P</span>
-          <input
-            v-model.number="previewPadding"
-            class="uis-variant-pad-input"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            max="120"
-            step="1"
-          >
-        </label>
-      </div>
-      <div class="uis-variant-size-controls">
-        <div class="uis-variant-presets" role="group" aria-label="Preview width presets">
+    
+        <div
+          ref="previewEl"
+          class="uis-variant-preview"
+          aria-label="Resizable preview area"
+          :style="previewStyle"
+        >
+          <div class="uis-variant-preview-inner" :style="previewInnerStyle">
+            <slot />
+          </div>
           <button
-            v-for="w in PRESET_WIDTHS"
-            :key="w"
             type="button"
-            class="uis-variant-preset"
-            :class="[{ 'uis-variant-preset--active': previewSize.w === w }]"
-            :aria-pressed="previewSize.w === w"
-            @click="setPresetWidth(w)"
-          >
-            {{ w }}
-          </button>
-  
-          <button class="uis-variant-preset" @click="setPresetWidth(999999)">Max</button>
+            class="uis-variant-resize-handle uis-variant-resize-handle--right"
+            aria-label="Resize preview width"
+            @pointerdown.prevent="(e) => onResizeDown(e, 'x')"
+          />
+          <button
+            type="button"
+            class="uis-variant-resize-handle uis-variant-resize-handle--bottom"
+            aria-label="Resize preview height"
+            @pointerdown.prevent="(e) => onResizeDown(e, 'y')"
+          />
         </div>
-        <span v-if="previewSizeLabel" class="uis-variant-size">
-          {{ previewSizeLabel }}
-        </span>
+    
+        <div v-if="$slots.controls" class="uis-variant-controls">
+          <slot name="controls" />
+        </div>
       </div>
-    </div>
+    </template>
 
-    <div
-      ref="previewEl"
-      class="uis-variant-preview"
-      aria-label="Resizable preview area"
-      :style="previewStyle"
-    >
-      <div class="uis-variant-preview-inner" :style="previewInnerStyle">
-        <slot />
+    <div class="uis-variant-tools">
+      <div class="uis-variant-align" role="group" aria-label="Preview content alignment">
+        <div class="uis-variant-align-group" role="group" aria-label="Horizontal align">
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewJustify === 'flex-start' }"
+            :aria-pressed="previewJustify === 'flex-start'"
+            title="Align left"
+            @click="previewJustify = 'flex-start'"
+          >
+            L
+          </button>
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewJustify === 'center' }"
+            :aria-pressed="previewJustify === 'center'"
+            title="Align center"
+            @click="previewJustify = 'center'"
+          >
+            C
+          </button>
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewJustify === 'flex-end' }"
+            :aria-pressed="previewJustify === 'flex-end'"
+            title="Align right"
+            @click="previewJustify = 'flex-end'"
+          >
+            R
+          </button>
+        </div>
+        <div class="uis-variant-align-group" role="group" aria-label="Vertical align">
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewAlign === 'flex-start' }"
+            :aria-pressed="previewAlign === 'flex-start'"
+            title="Align top"
+            @click="previewAlign = 'flex-start'"
+          >
+            T
+          </button>
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewAlign === 'center' }"
+            :aria-pressed="previewAlign === 'center'"
+            title="Align middle"
+            @click="previewAlign = 'center'"
+          >
+            M
+          </button>
+          <button
+            type="button"
+            class="uis-variant-mini"
+            :class="{ 'uis-variant-mini--active': previewAlign === 'flex-end' }"
+            :aria-pressed="previewAlign === 'flex-end'"
+            title="Align bottom"
+            @click="previewAlign = 'flex-end'"
+          >
+            B
+          </button>
+        </div>
       </div>
-      <button
-        type="button"
-        class="uis-variant-resize-handle uis-variant-resize-handle--right"
-        aria-label="Resize preview width"
-        @pointerdown.prevent="(e) => onResizeDown(e, 'x')"
-      />
-      <button
-        type="button"
-        class="uis-variant-resize-handle uis-variant-resize-handle--bottom"
-        aria-label="Resize preview height"
-        @pointerdown.prevent="(e) => onResizeDown(e, 'y')"
-      />
+      <label class="uis-variant-pad" aria-label="Preview padding">
+        <span class="uis-variant-pad-label">P</span>
+        <input
+          v-model.number="previewPadding"
+          class="uis-variant-pad-input"
+          type="number"
+          inputmode="numeric"
+          min="0"
+          max="120"
+          step="1"
+        >
+      </label>
     </div>
-
-    <div v-if="$slots.controls" class="uis-variant-controls">
-      <slot name="controls" />
-    </div>
-  </div>
+  </ContextMenu>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useElementSize, useEventListener } from '@vueuse/core'
+import ContextMenu from './contextmenu/ContextMenu.vue'
 
 const props = defineProps<{
   title?: string
@@ -320,6 +326,7 @@ function onResizeDown(e: PointerEvent, axis: ResizeAxis) {
 }
 
 .uis-variant-tools {
+  font-family: var(--uis-font-sans);
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
