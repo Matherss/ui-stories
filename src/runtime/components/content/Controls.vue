@@ -16,12 +16,19 @@ const fieldControls = computed(() =>
   controlsList.value.filter(c => c.type === 'select' || c.type === 'text'),
 )
 
+const objectControls = computed(() =>
+  controlsList.value.filter(c => c.type === 'object'),
+)
+
 const switchControls = computed(() =>
   controlsList.value.filter(c => c.type === 'boolean'),
 )
 
 const hasAnyControls = computed(
-  () => fieldControls.value.length > 0 || switchControls.value.length > 0,
+  () =>
+    fieldControls.value.length > 0
+    || switchControls.value.length > 0
+    || objectControls.value.length > 0,
 )
 
 function setControlValue(control: ControlItem, value: unknown) {
@@ -70,6 +77,17 @@ function setControlValue(control: ControlItem, value: unknown) {
         </template>
       </div>
     </div>
+
+    <div v-if="objectControls.length" class="uis-controls-objects">
+      <template v-for="control in objectControls" :key="control.name">
+        <UIStoriesControlObject
+          :id="`uis-ctl-${control.name}`"
+          :label="control.name"
+          :model-value="(control.value ?? {}) as Record<string, unknown>"
+          @update:model-value="setControlValue(control, $event)"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -101,5 +119,14 @@ function setControlValue(control: ControlItem, value: unknown) {
   font-weight: 600;
   color: #0f172a;
   font-family: var(--uis-font-sans, 'Commissioner', sans-serif);
+}
+
+.uis-controls-objects {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px;
+  margin-top: 8px;
+  min-width: 0;
 }
 </style>
