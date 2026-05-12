@@ -24,11 +24,16 @@ const switchControls = computed(() =>
   controlsList.value.filter(c => c.type === 'boolean'),
 )
 
+const numberControls = computed(() =>
+  controlsList.value.filter(c => c.type === 'number'),
+)
+
 const hasAnyControls = computed(
   () =>
     fieldControls.value.length > 0
     || switchControls.value.length > 0
-    || objectControls.value.length > 0,
+    || objectControls.value.length > 0
+    || numberControls.value.length > 0,
 )
 
 function setControlValue(control: ControlItem, value: unknown) {
@@ -88,6 +93,17 @@ function setControlValue(control: ControlItem, value: unknown) {
         />
       </template>
     </div>
+
+    <div v-if="numberControls.length" class="uis-controls-numbers">
+      <template v-for="control in numberControls" :key="control.name">
+        <UIStoriesControlNumber
+          :id="`uis-ctl-${control.name}`"
+          :label="control.name"
+          :model-value="Number(control.value ?? 0)"
+          @update:model-value="setControlValue(control, $event)"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -122,6 +138,15 @@ function setControlValue(control: ControlItem, value: unknown) {
 }
 
 .uis-controls-objects {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px;
+  margin-top: 8px;
+  min-width: 0;
+}
+
+.uis-controls-numbers {
   display: flex;
   flex-direction: column;
   gap: 16px;

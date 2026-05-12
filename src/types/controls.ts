@@ -1,4 +1,4 @@
-export type ControlType = 'text' | 'boolean' | 'select' | 'object'
+export type ControlType = 'text' | 'boolean' | 'select' | 'object' | 'number'
 
 export interface BaseControl<T> {
   type: ControlType
@@ -22,4 +22,8 @@ export interface ObjectControl extends BaseControl<Record<string, unknown>> {
   type: 'object'
 }
 
-export type Control = TextControl | BooleanControl | SelectControl | ObjectControl
+export interface NumberControl extends BaseControl<number> {
+  type: 'number'
+}
+
+export type Control = TextControl | BooleanControl | SelectControl | ObjectControl | NumberControl
