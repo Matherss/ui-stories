@@ -1,10 +1,9 @@
-import { createHighlighter, type Highlighter } from 'shiki'
+import { createHighlighterCore, type HighlighterCore } from 'shiki/core'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
-let highlighterPromise: Promise<Highlighter> | null = null
+let highlighterPromise: Promise<HighlighterCore> | null = null
 
 const BUNDLED_THEMES = [
-  'vitesse-light',
-  'vitesse-dark',
   'github-light',
   'github-dark',
 ] as const
@@ -12,17 +11,21 @@ const BUNDLED_THEMES = [
 export type UIShikiTheme = (typeof BUNDLED_THEMES)[number]
 
 export const UISHIKI_THEME_OPTIONS: { id: UIShikiTheme; label: string }[] = [
-  { id: 'vitesse-light', label: 'Vitesse' },
-  { id: 'vitesse-dark', label: 'Vitesse Dark' },
   { id: 'github-light', label: 'GitHub' },
   { id: 'github-dark', label: 'GitHub Dark' },
 ]
 
-async function getHighlighter(): Promise<Highlighter> {
+async function getHighlighter(): Promise<HighlighterCore> {
   if (!highlighterPromise) {
-    highlighterPromise = createHighlighter({
-      themes: [...BUNDLED_THEMES],
-      langs: ['vue', 'html'],
+    highlighterPromise = createHighlighterCore({
+      themes: [
+        import('shiki/themes/github-light.mjs'),
+        import('shiki/themes/github-dark.mjs'),
+      ],
+      langs: [
+        import('shiki/langs/vue.mjs')
+      ],
+      engine: createJavaScriptRegexEngine()
     })
   }
   return highlighterPromise
@@ -30,7 +33,7 @@ async function getHighlighter(): Promise<Highlighter> {
 
 export async function highlightUiStoriesSnippet(
   source: string,
-  theme: UIShikiTheme = 'vitesse-light',
+  theme: UIShikiTheme = 'github-light',
 ): Promise<string> {
   const h = await getHighlighter()
   return h.codeToHtml(source.trimEnd(), {

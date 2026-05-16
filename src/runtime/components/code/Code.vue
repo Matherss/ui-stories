@@ -12,7 +12,7 @@ const SHIKI_THEME_STORAGE_KEY = 'uis:shiki-theme'
 
 function readStoredShikiTheme(): UIShikiTheme {
   if (typeof window === 'undefined')
-    return 'vitesse-light'
+    return 'github-light'
   try {
     const raw = localStorage.getItem(SHIKI_THEME_STORAGE_KEY)
     if (raw && UISHIKI_THEME_OPTIONS.some(o => o.id === raw))
@@ -21,7 +21,7 @@ function readStoredShikiTheme(): UIShikiTheme {
   catch {
     /* ignore */
   }
-  return 'vitesse-light'
+  return 'github-light'
 }
 
 function persistShikiTheme(theme: UIShikiTheme) {
