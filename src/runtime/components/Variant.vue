@@ -154,8 +154,8 @@ const previewEl = ref<HTMLElement | null>(null)
 const previewWidth = ref<number | null>(null)
 const previewHeight = ref<number | null>(null)
 const previewPadding = ref(0)
-const previewJustify = ref<'flex-start' | 'center' | 'flex-end'>('center')
-const previewAlign = ref<'flex-start' | 'center' | 'flex-end'>('center')
+const previewJustify = ref<'flex-start' | 'center' | 'flex-end'>('flex-start')
+const previewAlign = ref<'flex-start' | 'center' | 'flex-end'>('flex-start')
 
 const previewSize = computed(() => {
   const w = Math.round(previewMeasuredWidth.value)
