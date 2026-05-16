@@ -3,7 +3,7 @@ import type { StoryMeta } from '../../../src/types/story-meta'
 
 export const storyMeta: StoryMeta = {
   name: 'Counter',
-  directory: ['Components'],
+  directory: ['Components', 'test'],
   description: ['A counter component with increment and decrement buttons.'],
 }
 </script>

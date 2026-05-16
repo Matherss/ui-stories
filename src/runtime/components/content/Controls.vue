@@ -12,28 +12,24 @@ const controlsRaw = inject<Record<string, ControlItem>>('uis-controls')
 
 const controlsList = computed(() => Object.values(controlsRaw ?? {}))
 
-const fieldControls = computed(() =>
-  controlsList.value.filter(c => c.type === 'select' || c.type === 'text'),
-)
-
-const objectControls = computed(() =>
-  controlsList.value.filter(c => c.type === 'object'),
-)
-
-const switchControls = computed(() =>
-  controlsList.value.filter(c => c.type === 'boolean'),
-)
-
-const numberControls = computed(() =>
-  controlsList.value.filter(c => c.type === 'number'),
-)
+const splittedControls = computed(() => {
+  const leftControls = []
+  const rightControls = []
+  for (const control of controlsList.value) {
+    if (control.type === 'select' || control.type === 'text' || control.type === 'number') {
+      leftControls.push(control)
+    }
+    else {
+      rightControls.push(control)
+    }
+  }
+  return { leftControls, rightControls }
+})
 
 const hasAnyControls = computed(
   () =>
-    fieldControls.value.length > 0
-    || switchControls.value.length > 0
-    || objectControls.value.length > 0
-    || numberControls.value.length > 0,
+    splittedControls.value.leftControls.length > 0
+    || splittedControls.value.rightControls.length > 0,
 )
 
 function setControlValue(control: ControlItem, value: unknown) {
@@ -51,7 +47,7 @@ function setControlValue(control: ControlItem, value: unknown) {
     </div>
     <div class="uis-controls-grid">
       <div class="uis-controls-col uis-controls-col--fields">
-        <template v-for="control in fieldControls" :key="control.name">
+        <template v-for="control in splittedControls.leftControls" :key="control.name">
           <UIStoriesControlSelect
             v-if="control.type === 'select'"
             :id="`uis-ctl-${control.name}`"
@@ -68,41 +64,36 @@ function setControlValue(control: ControlItem, value: unknown) {
             :model-value="String(control.value ?? '')"
             @update:model-value="setControlValue(control, $event)"
           />
+
+          <UIStoriesControlNumber
+            v-else-if="control.type === 'number'"
+            :id="`uis-ctl-${control.name}`"
+            :label="control.name"
+            :model-value="Number(control.value ?? 0)"
+            @update:model-value="setControlValue(control, $event)"
+          />
         </template>
       </div>
 
       <div class="uis-controls-col uis-controls-col--switches">
-        <template v-for="control in switchControls" :key="control.name">
+        <template v-for="control in splittedControls.rightControls" :key="control.name">
           <UIStoriesControlSwitch
+            v-if="control.type === 'boolean'"
             :id="`uis-ctl-${control.name}`"
             :label="control.name"
             :model-value="Boolean(control.value)"
             @update:model-value="setControlValue(control, $event)"
           />
+          
+          <UIStoriesControlObject
+            v-else-if="control.type === 'object'"
+            :id="`uis-ctl-${control.name}`"
+            :label="control.name"
+            :model-value="(control.value ?? {}) as Record<string, unknown>"
+            @update:model-value="setControlValue(control, $event)"
+          />
         </template>
       </div>
-    </div>
-
-    <div v-if="objectControls.length" class="uis-controls-objects">
-      <template v-for="control in objectControls" :key="control.name">
-        <UIStoriesControlObject
-          :id="`uis-ctl-${control.name}`"
-          :label="control.name"
-          :model-value="(control.value ?? {}) as Record<string, unknown>"
-          @update:model-value="setControlValue(control, $event)"
-        />
-      </template>
-    </div>
-
-    <div v-if="numberControls.length" class="uis-controls-numbers">
-      <template v-for="control in numberControls" :key="control.name">
-        <UIStoriesControlNumber
-          :id="`uis-ctl-${control.name}`"
-          :label="control.name"
-          :model-value="Number(control.value ?? 0)"
-          @update:model-value="setControlValue(control, $event)"
-        />
-      </template>
     </div>
   </div>
 </template>

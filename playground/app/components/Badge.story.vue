@@ -3,7 +3,7 @@ import type { StoryMeta } from '../../../src/types/story-meta'
 
 export const storyMeta: StoryMeta = {
   name: 'Badges',
-  directory: ['Components'],
+  directory: ['Components', 'ui','badge'],
   figma: 'https://www.figma.com',
   description: [
     'Compact label for status or category.',

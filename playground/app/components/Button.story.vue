@@ -3,7 +3,7 @@ import type { StoryMeta } from '../../../src/types/story-meta'
 
 export const storyMeta: StoryMeta = {
   name: 'Buttons',
-  directory: ['Components'],
+  directory: ['Components', 'ui'],
   figma: 'https://www.figma.com',
   description: [
     'Primary actions in the interface.',
@@ -20,6 +20,8 @@ const controls = useControls({
   variant: { type: 'select', options: ['primary', 'secondary'], default: 'primary' },
   isDisabled: { type: 'boolean', default: false },
   label: { type: 'text', default: 'Button' },
+  number: { type: 'number', default: 10 },
+  object: { type: 'object', default: { name: 'John Doe', age: 30 } },
 })
 </script>
 
