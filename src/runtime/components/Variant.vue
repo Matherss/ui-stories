@@ -1,63 +1,56 @@
 <template>
-  <ContextMenu>
-    <template #trigger>
-      <div class="uis-variant">
-        <div class="uis-variant-header">
-          <h3 v-if="$slots.title || title" class="uis-variant-title">
-            <slot name="title">{{ title }}</slot>
-          </h3>
-          
-          <div class="uis-variant-size-controls">
-            <div class="uis-variant-presets" role="group" aria-label="Preview width presets">
-              <button
-                v-for="w in PRESET_WIDTHS"
-                :key="w"
-                type="button"
-                class="uis-variant-preset"
-                :class="[{ 'uis-variant-preset--active': previewSize.w === w }]"
-                :aria-pressed="previewSize.w === w"
-                @click="setPresetWidth(w)"
-              >
-                {{ w }}
-              </button>
+  <div class="uis-variant">
+    <div class="uis-variant-header">
+      <h3 v-if="$slots.title || title" class="uis-variant-title">
+        <slot name="title">{{ title }}</slot>
+      </h3>
       
-              <button class="uis-variant-preset" @click="setPresetWidth(999999)">Max</button>
-            </div>
-            <span v-if="previewSizeLabel" class="uis-variant-size">
-              {{ previewSizeLabel }}
-            </span>
-          </div>
-        </div>
-    
-        <div
-          ref="previewEl"
-          class="uis-variant-preview"
-          aria-label="Resizable preview area"
-          :style="previewStyle"
-        >
-          <div class="uis-variant-preview-inner" :style="previewInnerStyle">
-            <slot />
-          </div>
+      <div class="uis-variant-size-controls">
+        <div class="uis-variant-presets" role="group" aria-label="Preview width presets">
           <button
+            v-for="w in PRESET_WIDTHS"
+            :key="w"
             type="button"
-            class="uis-variant-resize-handle uis-variant-resize-handle--right"
-            aria-label="Resize preview width"
-            @pointerdown.prevent="(e) => onResizeDown(e, 'x')"
-          />
-          <button
-            type="button"
-            class="uis-variant-resize-handle uis-variant-resize-handle--bottom"
-            aria-label="Resize preview height"
-            @pointerdown.prevent="(e) => onResizeDown(e, 'y')"
-          />
+            class="uis-variant-preset"
+            :class="[{ 'uis-variant-preset--active': previewSize.w === w }]"
+            :aria-pressed="previewSize.w === w"
+            @click="setPresetWidth(w)"
+          >
+            {{ w }}
+          </button>
+  
+          <button class="uis-variant-preset" @click="setPresetWidth(999999)">Max</button>
         </div>
-    
-        <div v-if="$slots.controls" class="uis-variant-controls">
-          <slot name="controls" />
-        </div>
+        <span v-if="previewSizeLabel" class="uis-variant-size">
+          {{ previewSizeLabel }}
+        </span>
       </div>
-    </template>
+    </div>
 
+    <div
+      ref="previewEl"
+      class="uis-variant-preview"
+      aria-label="Resizable preview area"
+      :style="previewStyle"
+    >
+      <div class="uis-variant-preview-inner" :style="previewInnerStyle">
+        <slot />
+      </div>
+      <button
+        type="button"
+        class="uis-variant-resize-handle uis-variant-resize-handle--right"
+        aria-label="Resize preview width"
+        @pointerdown.prevent="(e) => onResizeDown(e, 'x')"
+      />
+      <button
+        type="button"
+        class="uis-variant-resize-handle uis-variant-resize-handle--bottom"
+        aria-label="Resize preview height"
+        @pointerdown.prevent="(e) => onResizeDown(e, 'y')"
+      />
+    </div>
+
+    
     <div class="uis-variant-tools">
       <div class="uis-variant-align" role="group" aria-label="Preview content alignment">
         <div class="uis-variant-align-group" role="group" aria-label="Horizontal align">
@@ -138,7 +131,10 @@
         >
       </label>
     </div>
-  </ContextMenu>
+    <div v-if="$slots.controls" class="uis-variant-controls">
+      <slot name="controls" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -326,10 +322,14 @@ function onResizeDown(e: PointerEvent, axis: ResizeAxis) {
 }
 
 .uis-variant-tools {
+  width: 100%;
+  padding: 6px 12px;
+  background: #f8fafc;
   font-family: var(--uis-font-sans);
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
 }
 
