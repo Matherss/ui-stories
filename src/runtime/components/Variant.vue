@@ -479,6 +479,7 @@ function onResizeDown(e: PointerEvent, axis: ResizeAxis) {
   gap: 16px;
 
   overflow: hidden;
+  overflow-y: auto;
 }
 
 .uis-variant-resize-handle {
