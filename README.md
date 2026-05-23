@@ -114,12 +114,6 @@ Example: `app/components/Badge.story.vue` → id `components--Badge` →
 - Ignores `*.story.vue` in Nuxt’s component auto-import scan so they are only used as stories.
 - Injects shared UI styles (`uis.css`) and theme CSS variables (`--uis-*`).
 
-## Variant context menu (right click)
-
-Inside `UIStoriesVariant`, **right-click** the variant block to open a context menu where you can quickly tweak the preview (e.g. **padding** and **content alignment**).
-
-![Variant context menu](./.github/assets/contextmenu.gif)
-
 ## Variant resize
 
 Drag the resize handles to adjust the preview size. Preset width buttons snap cleanly to the current measured width.
