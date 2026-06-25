@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, inject, onUnmounted, ref, watch } from 'vue'
+import { useTimeoutFn } from '@vueuse/core'
 import type { StoryMeta } from '../../../types/story-meta'
+import { uisStoryLoadingKey } from '../../inject-keys'
 import SidebarBranch, { type TreeNode } from './SidebarBranch.vue'
 
 const props = defineProps<{
@@ -10,8 +12,11 @@ const props = defineProps<{
   basePath: string
 }>()
 
+const storyLoading = inject(uisStoryLoadingKey, ref(false))
+
 const search = ref('')
 const openGroups = ref<Set<string>>(new Set())
+const hasExpandedAll = ref(false)
 
 function normalizeBase(): string {
   return props.basePath.replace(/\/$/, '') || '/stories'
@@ -79,6 +84,29 @@ function buildTree(): TreeNode[] {
 
 const tree = computed(() => buildTree())
 
+function collectAllFolderKeys(nodes: TreeNode[]): string[] {
+  const keys: string[] = []
+  function walk(list: TreeNode[]) {
+    for (const n of list) {
+      if (!n.storyId) {
+        keys.push(n.key)
+        walk(n.children)
+      }
+    }
+  }
+  walk(nodes)
+  return keys
+}
+
+function mergeOpenKeys(keys: string[]) {
+  if (!keys.length)
+    return
+  const next = new Set(openGroups.value)
+  for (const k of keys)
+    next.add(k)
+  openGroups.value = next
+}
+
 function collectAncestorKeys(
   nodes: TreeNode[],
   targetId: string,
@@ -104,12 +132,46 @@ watch(
     const ancestors = collectAncestorKeys(nodes, currentId)
     if (!ancestors?.length)
       return
-    const next = new Set(openGroups.value)
-    for (const k of ancestors)
-      next.add(k)
-    openGroups.value = next
+    mergeOpenKeys(ancestors)
   },
 )
+
+let idleExpandHandle: number | undefined
+
+const { start: scheduleExpandAll, stop: cancelExpandAll } = useTimeoutFn(
+  () => mergeOpenKeys(collectAllFolderKeys(tree.value)),
+  0,
+)
+
+function scheduleExpandAllWhenIdle() {
+  if (hasExpandedAll.value)
+    return
+  hasExpandedAll.value = true
+
+  const run = () => mergeOpenKeys(collectAllFolderKeys(tree.value))
+
+  if (typeof requestIdleCallback === 'function') {
+    idleExpandHandle = requestIdleCallback(run, { timeout: 500 })
+  }
+  else {
+    scheduleExpandAll()
+  }
+}
+
+watch(
+  storyLoading,
+  (loading) => {
+    if (!loading)
+      scheduleExpandAllWhenIdle()
+  },
+  { immediate: true, flush: 'post' },
+)
+
+onUnmounted(() => {
+  cancelExpandAll()
+  if (idleExpandHandle !== undefined && typeof cancelIdleCallback === 'function')
+    cancelIdleCallback(idleExpandHandle)
+})
 
 function isOpen(key: string): boolean {
   return openGroups.value.has(key)

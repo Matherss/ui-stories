@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, type Component, type ComputedRef, type Ref } from 'vue'
+import { computed, inject, type Component, type ComputedRef, ref } from 'vue'
 import { definePageMeta } from '#imports'
 import Block from '../components/ui/Block.vue'
-import { uisStoryIdKey } from '../inject-keys'
+import { uisStoryIdKey, uisStoryLoadingKey } from '../inject-keys'
 
 definePageMeta({
   layout: false,
 })
 
 const story = inject<ComputedRef<Component | null>>('uis-story')
-const storyLoading = inject<Ref<boolean>>('uis-story-loading')
+const storyLoading = inject(uisStoryLoadingKey, ref(false))
 const storyId = inject(uisStoryIdKey, null)
 
 const hasStoryId = computed(() => !!storyId?.value)

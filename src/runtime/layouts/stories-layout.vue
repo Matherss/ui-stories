@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { storyLoaders, storiesMeta, storyVariantSourceLoaders } from 'virtual:stories'
-import { computed, provide, reactive, ref, shallowRef, watch, type Component } from 'vue'
+import { computed, nextTick, provide, reactive, ref, shallowRef, watch, type Component } from 'vue'
 import { definePageMeta, useRoute, useRuntimeConfig } from '#imports'
 import Block from '../components/ui/Block.vue'
-import { uisControlsRegistryKey, uisStoryIdKey, uisVariantSourcesKey } from '../inject-keys'
+import { uisControlsRegistryKey, uisStoryIdKey, uisStoryLoadingKey, uisVariantSourcesKey } from '../inject-keys'
 
 definePageMeta({
   layout: false,
@@ -51,27 +51,19 @@ watch(storyId, async (id, _prev, onCleanup) => {
   const loader = storyLoaders[id]
   const sourcesLoader = storyVariantSourceLoaders[id]
 
-  const tasks: Promise<void>[] = []
-
   if (loader) {
-    tasks.push(
-      loader().then((mod) => {
-        if (!cancelled)
-          storyComponent.value = mod.default
-      }),
-    )
+    const mod = await loader()
+    if (!cancelled) {
+      storyComponent.value = mod.default
+      await nextTick()
+    }
   }
 
-  if (sourcesLoader) {
-    tasks.push(
-      sourcesLoader().then((mod) => {
-        if (!cancelled)
-          variantSourcesList.value = mod.default ?? []
-      }),
-    )
+  if (!cancelled && sourcesLoader) {
+    const mod = await sourcesLoader()
+    if (!cancelled)
+      variantSourcesList.value = mod.default ?? []
   }
-
-  await Promise.all(tasks)
 
   if (!cancelled)
     storyLoading.value = false
@@ -88,7 +80,7 @@ const storyMeta = computed(() => {
 
 provide('uis-story-meta', storyMeta)
 provide('uis-story', story)
-provide('uis-story-loading', storyLoading)
+provide(uisStoryLoadingKey, storyLoading)
 provide(uisStoryIdKey, storyId)
 provide(uisControlsRegistryKey, controlsRegistry)
 
