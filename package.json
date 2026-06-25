@@ -37,6 +37,14 @@
     "./runtime/utils": {
       "types": "./dist/runtime/utils/index.d.ts",
       "import": "./dist/runtime/utils/index.js"
+    },
+    "./runtime/types": {
+      "types": "./dist/runtime/types/index.d.ts",
+      "import": "./dist/runtime/types/index.js"
+    },
+    "./types/story-meta": {
+      "types": "./dist/runtime/types/story-meta.d.ts",
+      "import": "./dist/runtime/types/story-meta.js"
     }
   },
   "devDependencies": {
