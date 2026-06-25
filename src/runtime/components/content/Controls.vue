@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
+import type { ControlRuntimeItem } from '../../inject-keys'
+import { uisControlsRegistryKey, uisStoryIdKey } from '../../inject-keys'
 
-interface ControlItem {
-  name: string
-  value: unknown
-  type: string
-  options?: string[]
-}
+const storyId = inject(uisStoryIdKey, null)
+const registry = inject(uisControlsRegistryKey, null)
+const controlsFromProvide = inject<Record<string, ControlRuntimeItem> | null>('uis-controls', null)
 
-const controlsRaw = inject<Record<string, ControlItem>>('uis-controls')
+const controlsRaw = computed(() => {
+  const id = storyId?.value
+  if (id && registry?.has(id))
+    return registry.get(id)!
+  return controlsFromProvide
+})
 
-const controlsList = computed(() => Object.values(controlsRaw ?? {}))
+const controlsList = computed(() => Object.values(controlsRaw.value ?? {}))
 
 const splittedControls = computed(() => {
   const leftControls = []
@@ -32,8 +36,8 @@ const hasAnyControls = computed(
     || splittedControls.value.rightControls.length > 0,
 )
 
-function setControlValue(control: ControlItem, value: unknown) {
-  ;(control as { value: unknown }).value = value
+function setControlValue(control: ControlRuntimeItem, value: unknown) {
+  control.value = value
 }
 </script>
 
@@ -84,7 +88,7 @@ function setControlValue(control: ControlItem, value: unknown) {
             :model-value="Boolean(control.value)"
             @update:model-value="setControlValue(control, $event)"
           />
-          
+
           <UIStoriesControlObject
             v-else-if="control.type === 'object'"
             :id="`uis-ctl-${control.name}`"

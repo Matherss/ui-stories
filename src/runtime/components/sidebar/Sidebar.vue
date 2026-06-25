@@ -79,28 +79,36 @@ function buildTree(): TreeNode[] {
 
 const tree = computed(() => buildTree())
 
+function collectAncestorKeys(
+  nodes: TreeNode[],
+  targetId: string,
+  ancestors: string[] = [],
+): string[] | null {
+  for (const n of nodes) {
+    if (n.storyId === targetId)
+      return ancestors
+    if (!n.storyId) {
+      const found = collectAncestorKeys(n.children, targetId, [...ancestors, n.key])
+      if (found)
+        return found
+    }
+  }
+  return null
+}
+
 watch(
-  tree,
-  (nodes) => {
-    const keys = new Set<string>()
-    function walk(list: TreeNode[]) {
-      for (const n of list) {
-        if (!n.storyId)
-          keys.add(n.key)
-        walk(n.children)
-      }
-    }
-    walk(nodes)
-    const next = new Set<string>()
-    for (const k of openGroups.value) {
-      if (keys.has(k))
-        next.add(k)
-    }
-    for (const k of keys)
+  () => [tree.value, props.currentId] as const,
+  ([nodes, currentId]) => {
+    if (!currentId)
+      return
+    const ancestors = collectAncestorKeys(nodes, currentId)
+    if (!ancestors?.length)
+      return
+    const next = new Set(openGroups.value)
+    for (const k of ancestors)
       next.add(k)
     openGroups.value = next
   },
-  { immediate: true },
 )
 
 function isOpen(key: string): boolean {

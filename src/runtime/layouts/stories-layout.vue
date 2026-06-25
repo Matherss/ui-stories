@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { stories, storiesMeta, storyVariantSources } from 'virtual:stories'
-import { computed, provide } from 'vue'
+import { storyLoaders, storiesMeta, storyVariantSourceLoaders } from 'virtual:stories'
+import { computed, provide, reactive, ref, shallowRef, watch, type Component } from 'vue'
 import { definePageMeta, useRoute, useRuntimeConfig } from '#imports'
 import Block from '../components/ui/Block.vue'
-import { uisVariantSourcesKey } from '../inject-keys'
+import { uisControlsRegistryKey, uisStoryIdKey, uisVariantSourcesKey } from '../inject-keys'
 
 definePageMeta({
   layout: false,
@@ -24,14 +24,60 @@ const storyId = computed(() => {
   return Array.isArray(id) ? id[0] ?? null : id
 })
 
-const storiesIds = computed(() => Object.keys(stories))
+const storiesIds = computed(() => Object.keys(storiesMeta))
 
-const story = computed(() => {
-  const id = storyId.value
-  if (!id)
-    return null
-  return stories[id]
-})
+const controlsRegistry = reactive(new Map())
+
+const storyComponent = shallowRef<Component | null>(null)
+const storyLoading = ref(false)
+const variantSourcesList = shallowRef<string[]>([])
+
+watch(storyId, async (id, _prev, onCleanup) => {
+  let cancelled = false
+  onCleanup(() => {
+    cancelled = true
+  })
+
+  storyComponent.value = null
+  variantSourcesList.value = []
+
+  if (!id) {
+    storyLoading.value = false
+    return
+  }
+
+  storyLoading.value = true
+
+  const loader = storyLoaders[id]
+  const sourcesLoader = storyVariantSourceLoaders[id]
+
+  const tasks: Promise<void>[] = []
+
+  if (loader) {
+    tasks.push(
+      loader().then((mod) => {
+        if (!cancelled)
+          storyComponent.value = mod.default
+      }),
+    )
+  }
+
+  if (sourcesLoader) {
+    tasks.push(
+      sourcesLoader().then((mod) => {
+        if (!cancelled)
+          variantSourcesList.value = mod.default ?? []
+      }),
+    )
+  }
+
+  await Promise.all(tasks)
+
+  if (!cancelled)
+    storyLoading.value = false
+}, { immediate: true })
+
+const story = computed(() => storyComponent.value)
 
 const storyMeta = computed(() => {
   const id = storyId.value
@@ -41,16 +87,13 @@ const storyMeta = computed(() => {
 })
 
 provide('uis-story-meta', storyMeta)
-
-const variantSourcesList = computed(() => {
-  const id = storyId.value
-  if (!id)
-    return [] as string[]
-  return storyVariantSources[id] ?? []
-})
-provide(uisVariantSourcesKey, variantSourcesList)
-
 provide('uis-story', story)
+provide('uis-story-loading', storyLoading)
+provide(uisStoryIdKey, storyId)
+provide(uisControlsRegistryKey, controlsRegistry)
+
+const variantSources = computed(() => variantSourcesList.value)
+provide(uisVariantSourcesKey, variantSources)
 </script>
 
 <template>
@@ -66,8 +109,8 @@ provide('uis-story', story)
           />
         </Block>
         <NuxtPage />
-        <Block v-if="story">
-          <UIStoriesCode v-if="story" />
+        <Block v-if="storyId">
+          <UIStoriesCode />
         </Block>
       </div>
     </div>

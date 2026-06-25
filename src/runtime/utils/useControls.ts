@@ -1,5 +1,6 @@
-import { provide, reactive } from 'vue'
+import { inject, onUnmounted, provide, reactive, watch, type Reactive } from 'vue'
 import type { Control, ControlsResult } from './controls'
+import { uisControlsRegistryKey, uisStoryIdKey, type ControlRuntimeItem } from '../inject-keys'
 
 export function useControls<T extends Record<string, Control>>(controls: T) {
   const result = {} as ControlsResult<T>
@@ -21,7 +22,31 @@ export function useControls<T extends Record<string, Control>>(controls: T) {
     result[key] = item as ControlsResult<T>[typeof key]
   }
 
-  provide('uis-controls', result)
+  const reactiveResult = reactive(result)
 
-  return reactive(result)
+  const storyId = inject(uisStoryIdKey, null)
+  const registry = inject(uisControlsRegistryKey, null)
+
+  if (storyId && registry) {
+    watch(
+      storyId,
+      (id, prevId) => {
+        if (prevId)
+          registry.delete(prevId)
+        if (id)
+          registry.set(id, reactiveResult as Reactive<Record<string, ControlRuntimeItem>>)
+      },
+      { immediate: true },
+    )
+
+    onUnmounted(() => {
+      const id = storyId.value
+      if (id)
+        registry.delete(id)
+    })
+  }
+
+  provide('uis-controls', reactiveResult)
+
+  return reactiveResult
 }
