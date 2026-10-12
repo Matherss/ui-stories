@@ -59,7 +59,7 @@
   "dependencies": {
     "@nuxt/kit": "^4.4.2",
     "@vue/compiler-dom": "^3.5.33",
-    "@vueuse/core": "^14.3.0",
+    "@vueuse/core": "^15.0.0",
     "shiki": "^4.0.2",
     "tinyglobby": "^0.2.16"
   },
